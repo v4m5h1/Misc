@@ -1,52 +1,49 @@
  #Misc
 
 ---
-Here's a revised plan for decommissioning a SharePoint Online tenant, to be implemented after the completion of a migration process:
+### Gather Necessary Information/Evidence to Close ETADE Migration Pending AP
 
----
+#### Story (the Narrative)
+As a developer, I need to gather the necessary information and evidence to close the pending Action Points (AP) related to the ETADE migration, ensuring that all requirements are met and the migration process is fully documented.
 
-### **Post-Migration SharePoint Online Tenant Decommissioning Plan**
+#### Acceptance Criteria/Test (the What)
+- Identify all pending Action Points (AP) related to the ETADE migration.
+- Gather detailed information and evidence for each AP, including system logs, user feedback, migration reports, and any other relevant data.
+- Document the status and resolution of each AP, providing clear and comprehensive explanations.
+- Ensure that the information gathered is accurate, complete, and meets the criteria set by stakeholders.
+- Submit the compiled information to the relevant stakeholders for review and approval.
 
-#### **1. Post-Migration Verification**
-   - **Verify Data Integrity:** Ensure that all data has been successfully migrated and is accessible in the new environment.
-   - **Confirm Functionality:** Check that all features, permissions, and integrations are functioning as expected in the new system.
+#### Dependencies/Constraints
+- Access to system logs, migration reports, and other relevant documentation.
+- Collaboration with team members and stakeholders to obtain necessary information.
+- Proper permissions to access and review migration data.
+- Alignment with the criteria and expectations set by stakeholders for closing the AP.
 
-#### **2. Stakeholder Communication**
-   - **Update Stakeholders:** Inform all relevant parties about the successful completion of the migration and the upcoming decommissioning of the old tenant.
-   - **Provide Support Information:** Share support channels and documentation for the new environment to assist users with the transition.
+#### Technical Details
+- **Technology:** Use existing tools and systems to extract and compile data (e.g., logging systems, migration tracking tools).
+- **Data Sources:** System logs, migration reports, user feedback, project documentation.
+- **Documentation:** Compile information into a structured report or database for easy review and approval.
+- **Validation:** Cross-check gathered data against requirements to ensure completeness and accuracy.
 
-#### **3. Disable New Content Creation**
-   - **Restrict Permissions:** Prevent the creation of new content in the old tenant by restricting permissions to read-only.
-   - **Suspend Changes:** Halt any further configuration changes or development activities in the old tenant.
+### Steps to Implement
 
-#### **4. Backup and Archival**
-   - **Final Backup:** Perform a final backup of the old tenant's data, including sites, libraries, lists, and other critical content.
-   - **Archive Important Data:** Identify and archive any important or legally required data separately, ensuring compliance with retention policies.
+1. **Identify Pending APs:**
+   - Review project documentation and communication logs to identify all pending Action Points related to the ETADE migration.
 
-#### **5. Data Purge and Compliance**
-   - **Purge Unnecessary Data:** Securely delete any data that is no longer needed or that has been confirmed as successfully migrated.
-   - **Compliance Review:** Ensure all actions comply with regulatory and legal requirements, especially concerning data retention and deletion.
+2. **Gather Information:**
+   - Collect system logs that detail the migration process, focusing on any issues or anomalies encountered.
+   - Obtain user feedback regarding the migration to understand any concerns or issues raised.
+   - Gather migration reports and documentation that provide a comprehensive overview of the process and outcomes.
+   - Collect additional evidence as needed, such as screenshots, error messages, or system metrics.
 
-#### **6. Deactivate Services**
-   - **Disable Integrations:** Turn off any integrations, workflows, and third-party services connected to the old tenant.
-   - **Cancel Licenses and Subscriptions:** Review and cancel any remaining SharePoint Online licenses or subscriptions associated with the tenant.
+3. **Document and Compile Data:**
+   - Organize the gathered information into a structured format, such as a report or database.
+   - Clearly document the status and resolution of each AP, providing detailed explanations and evidence.
+   - Ensure the documentation is thorough and meets the criteria for closing the AP.
 
-#### **7. User Account Management**
-   - **Revoke Access:** Remove access for all users, including external users, to prevent any further login attempts.
-   - **Deactivate Accounts:** Deactivate or delete user accounts in the old tenant.
+4. **Review and Approval:**
+   - Share the compiled information with relevant stakeholders for review.
+   - Address any feedback or requests for additional information to ensure all APs are satisfactorily closed.
+   - Obtain formal approval from stakeholders to close the AP.
 
-#### **8. Final Tenant Closure**
-   - **Request Official Closure:** Contact Microsoft to officially close the tenant if this step is required by your subscription type.
-   - **Verify Billing Cessation:** Ensure that billing for the old tenant ceases, and review for any potential outstanding charges.
-
-#### **9. Post-Decommission Review and Documentation**
-   - **Document Process:** Record the decommissioning steps taken, including any issues encountered and their resolutions.
-   - **Report to Stakeholders:** Provide a comprehensive report to stakeholders summarizing the decommissioning process and final state.
-
-#### **10. Long-term Data Management**
-   - **Monitor Archived Data:** Set up a plan for managing archived data, including access controls and regular reviews for relevance.
-   - **Plan for Future Needs:** Consider any future needs for the old data or configurations and plan accordingly.
-
----
-
-This plan ensures a smooth and compliant decommissioning process, preserving necessary data while effectively shutting down the old SharePoint Online tenant.
+This story outlines the steps required to gather and compile the necessary information and evidence to close pending Action Points related to the ETADE migration, ensuring that all issues are resolved and documented to the satisfaction of stakeholders.
