@@ -1,46 +1,52 @@
  #Misc
 
 ---
-Decommissioning a SharePoint Online tenant involves several steps to ensure that all data is properly handled, users are informed, and compliance requirements are met. Here's a general outline of the process:
+Here's a revised plan for decommissioning a SharePoint Online tenant, to be implemented after the completion of a migration process:
 
-### 1. **Planning and Communication**
-   - **Assess Requirements:** Determine the reasons for decommissioning and any regulatory or compliance requirements that must be met.
-   - **Notify Stakeholders:** Inform all affected users, departments, and stakeholders about the decommissioning plan and timeline.
+---
 
-### 2. **Data Backup and Migration**
-   - **Data Backup:** Perform a comprehensive backup of all sites, libraries, lists, and other content. Use third-party tools if necessary.
-   - **Data Migration:** If needed, migrate data to another SharePoint tenant, on-premises environment, or alternative storage solution.
+### **Post-Migration SharePoint Online Tenant Decommissioning Plan**
 
-### 3. **Audit and Documentation**
-   - **Audit Content:** Review and document the content to identify sensitive information and ensure that necessary data retention policies are followed.
-   - **Document Settings and Configurations:** Record important settings, configurations, and customizations for reference or future use.
+#### **1. Post-Migration Verification**
+   - **Verify Data Integrity:** Ensure that all data has been successfully migrated and is accessible in the new environment.
+   - **Confirm Functionality:** Check that all features, permissions, and integrations are functioning as expected in the new system.
 
-### 4. **Disable New Content Creation**
-   - **Restrict Access:** Prevent users from adding new content by adjusting permissions or settings.
-   - **Freeze Development and Changes:** Stop any ongoing development or configuration changes.
+#### **2. Stakeholder Communication**
+   - **Update Stakeholders:** Inform all relevant parties about the successful completion of the migration and the upcoming decommissioning of the old tenant.
+   - **Provide Support Information:** Share support channels and documentation for the new environment to assist users with the transition.
 
-### 5. **User Account Management**
-   - **Remove External Users:** Remove access for external users.
-   - **Disable User Accounts:** Deactivate or delete user accounts that are no longer needed.
+#### **3. Disable New Content Creation**
+   - **Restrict Permissions:** Prevent the creation of new content in the old tenant by restricting permissions to read-only.
+   - **Suspend Changes:** Halt any further configuration changes or development activities in the old tenant.
 
-### 6. **Service Deactivation**
-   - **Turn Off Services:** Deactivate SharePoint Online services, including workflows, alerts, and integrations with other services.
-   - **Cancel Subscriptions:** If applicable, cancel any SharePoint Online subscriptions or licenses.
+#### **4. Backup and Archival**
+   - **Final Backup:** Perform a final backup of the old tenant's data, including sites, libraries, lists, and other critical content.
+   - **Archive Important Data:** Identify and archive any important or legally required data separately, ensuring compliance with retention policies.
 
-### 7. **Final Data Deletion**
-   - **Purge Data:** Permanently delete data from the tenant, ensuring that any sensitive information is securely removed.
-   - **Compliance Check:** Verify that data deletion complies with legal and regulatory requirements.
+#### **5. Data Purge and Compliance**
+   - **Purge Unnecessary Data:** Securely delete any data that is no longer needed or that has been confirmed as successfully migrated.
+   - **Compliance Review:** Ensure all actions comply with regulatory and legal requirements, especially concerning data retention and deletion.
 
-### 8. **Decommission Tenant**
-   - **Close Tenant:** Contact Microsoft to officially close the tenant if necessary.
-   - **Review Billing:** Ensure that billing is stopped for the tenant.
+#### **6. Deactivate Services**
+   - **Disable Integrations:** Turn off any integrations, workflows, and third-party services connected to the old tenant.
+   - **Cancel Licenses and Subscriptions:** Review and cancel any remaining SharePoint Online licenses or subscriptions associated with the tenant.
 
-### 9. **Post-Decommission Activities**
-   - **Update Documentation:** Record the decommissioning process and outcomes.
-   - **Review and Report:** Provide a report to stakeholders detailing the decommissioning process, including any issues encountered and how they were resolved.
+#### **7. User Account Management**
+   - **Revoke Access:** Remove access for all users, including external users, to prevent any further login attempts.
+   - **Deactivate Accounts:** Deactivate or delete user accounts in the old tenant.
 
-### Additional Considerations
-- **Legal Hold:** If your organization is under legal hold, ensure that you comply with all related requirements before deleting data.
-- **Compliance and Security:** Consider working with legal and compliance teams to ensure that all actions meet regulatory requirements.
+#### **8. Final Tenant Closure**
+   - **Request Official Closure:** Contact Microsoft to officially close the tenant if this step is required by your subscription type.
+   - **Verify Billing Cessation:** Ensure that billing for the old tenant ceases, and review for any potential outstanding charges.
 
-Each organization may have specific requirements and steps, so it's important to tailor the process to fit your needs and consult with legal, IT, and compliance teams as necessary.
+#### **9. Post-Decommission Review and Documentation**
+   - **Document Process:** Record the decommissioning steps taken, including any issues encountered and their resolutions.
+   - **Report to Stakeholders:** Provide a comprehensive report to stakeholders summarizing the decommissioning process and final state.
+
+#### **10. Long-term Data Management**
+   - **Monitor Archived Data:** Set up a plan for managing archived data, including access controls and regular reviews for relevance.
+   - **Plan for Future Needs:** Consider any future needs for the old data or configurations and plan accordingly.
+
+---
+
+This plan ensures a smooth and compliant decommissioning process, preserving necessary data while effectively shutting down the old SharePoint Online tenant.
