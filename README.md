@@ -474,3 +474,49 @@ export default DownloadLocation;
 ### Summary
 
 While working within the constraints of web browsers, this approach attempts to balance user experience and functionality. For a more seamless and intuitive folder selection experience, a desktop application or advanced browser APIs might be necessary.
+
+
+
+// src/components/DownloadLocation.js
+import React, { useState } from 'react';
+import { Form } from 'react-bootstrap';
+
+function DownloadLocation({ onLocationChange }) {
+  const [location, setLocation] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLocationChange = (e) => {
+    const path = e.target.value.trim();
+    setLocation(path);
+
+    // Basic validation for empty input
+    if (!path) {
+      setError('Please enter a download location');
+    } else {
+      // Example validation: Check if path format is valid (basic regex)
+      const pathRegex = /^[a-zA-Z0-9_\-/]+$/; // Adjust regex as needed
+      if (!pathRegex.test(path)) {
+        setError('Invalid path format');
+      } else {
+        setError('');
+        onLocationChange(path);
+      }
+    }
+  };
+
+  return (
+    <Form.Group controlId="downloadLocation">
+      <Form.Label>Download Location</Form.Label>
+      <Form.Control
+        type="text"
+        value={location}
+        onChange={handleLocationChange}
+        placeholder="Enter folder path"
+        isInvalid={!!error}
+      />
+      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+    </Form.Group>
+  );
+}
+
+export default DownloadLocation;
