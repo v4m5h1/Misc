@@ -1,346 +1,304 @@
  #Misc
 
 ---
-To enhance the React data entry form with accessibility and validation features, we will incorporate ARIA attributes for accessibility, and use the `Formik` and `Yup` libraries for form validation. Here’s a detailed guide on how to implement these features:
+Certainly! I'll provide detailed step-by-step instructions to build a React data entry form named "SPO Site Downloader" using Bootstrap and React in Visual Studio Code. Let's break this down into manageable steps:
 
-### **1. Set Up the Environment**
+Step 1: Set up the project
 
-#### **Install Node.js and Visual Studio Code**
-- Ensure Node.js and npm (Node Package Manager) are installed. Download them from the [Node.js official website](https://nodejs.org/).
-- Install [Visual Studio Code](https://code.visualstudio.com/).
+1. Open Visual Studio Code.
+2. Open a terminal within VS Code (View > Terminal).
+3. Navigate to your desired project directory.
+4. Create a new React project:
+   ```
+   npx create-react-app spo-site-downloader
+   cd spo-site-downloader
+   ```
+5. Install necessary dependencies:
+   ```
+   npm install react-bootstrap bootstrap axios formik yup
+   ```
 
-### **2. Create a New React Project**
+Step 2: Set up the project structure
 
-#### **Initialize the Project**
-- Open a terminal in Visual Studio Code.
-- Run the following command to create a new React application:
-  ```bash
-  npx create-react-app accessible-data-entry-form
-  ```
-- Navigate into your project directory:
-  ```bash
-  cd accessible-data-entry-form
-  ```
+1. In the `src` folder, create the following structure:
+   ```
+   src/
+   ├── components/
+   │   ├── SiteUrlInput.js
+   │   ├── AssetsCheckbox.js
+   │   ├── ZipRadio.js
+   │   ├── DownloadLocation.js
+   │   └── SubmitButton.js
+   ├── App.js
+   ├── App.css
+   └── index.js
+   ```
 
-### **3. Install Dependencies**
+Step 3: Set up the main App component
 
-#### **Bootstrap and Additional Libraries**
-- Install Bootstrap and additional necessary libraries:
-  ```bash
-  npm install bootstrap react-bootstrap react-select react-file-picker formik yup
-  ```
-- Import Bootstrap in `src/index.js`:
-  ```javascript
-  import 'bootstrap/dist/css/bootstrap.min.css';
-  ```
+1. Open `src/App.js` and replace its content with:
 
-### **4. Set Up Favicon**
-- Replace the default `public/favicon.ico` with your custom favicon.
-
-### **5. Create the Form Structure**
-
-#### **Component-Based Architecture**
-- **Create Subcomponents**: Split the form into manageable subcomponents.
-
-#### **Form Component Structure**
-- In the `src` directory, create a new folder called `components` and inside it, create the following files: `TextInput.js`, `CheckboxGroup.js`, `RadioGroup.js`, `AutocompleteInput.js`, `FolderPicker.js`, and `FormComponent.js`.
-
-##### **AutocompleteInput Component (`AutocompleteInput.js`)**
-```javascript
+```jsx
 import React from 'react';
-import Select from 'react-select';
-
-const AutocompleteInput = ({ label, id, options, value, onChange }) => {
-  return (
-    <div className="mb-3">
-      <label htmlFor={id} className="form-label">{label}</label>
-      <Select
-        inputId={id}
-        options={options}
-        value={value}
-        onChange={onChange}
-        isClearable
-        aria-labelledby={id}
-      />
-    </div>
-  );
-};
-
-export default AutocompleteInput;
-```
-
-##### **FolderPicker Component (`FolderPicker.js`)**
-```javascript
-import React, { useState } from 'react';
-import { FilePicker } from 'react-file-picker';
-
-const FolderPicker = ({ label, id, onFolderSelect }) => {
-  const [folderPath, setFolderPath] = useState('');
-
-  return (
-    <div className="mb-3">
-      <label htmlFor={id} className="form-label">{label}</label>
-      <div className="input-group">
-        <input
-          type="text"
-          className="form-control"
-          id={id}
-          value={folderPath}
-          readOnly
-          aria-describedby={`${id}-desc`}
-        />
-        <FilePicker
-          extensions={[]}
-          onChange={(file) => {
-            setFolderPath(file.path || file.name);
-            onFolderSelect(file.path || file.name);
-          }}
-          onError={errMsg => console.error(errMsg)}
-        >
-          <button type="button" className="btn btn-primary">Select Folder</button>
-        </FilePicker>
-      </div>
-      <div id={`${id}-desc`} className="form-text">
-        Please select a folder for download location.
-      </div>
-    </div>
-  );
-};
-
-export default FolderPicker;
-```
-
-##### **TextInput Component (`TextInput.js`)**
-```javascript
-import React from 'react';
-
-const TextInput = ({ label, id, error, ...props }) => {
-  return (
-    <div className="mb-3">
-      <label htmlFor={id} className="form-label">{label}</label>
-      <input type="text" className={`form-control ${error ? 'is-invalid' : ''}`} id={id} {...props} />
-      {error && <div className="invalid-feedback">{error}</div>}
-    </div>
-  );
-};
-
-export default TextInput;
-```
-
-##### **CheckboxGroup Component (`CheckboxGroup.js`)**
-```javascript
-import React from 'react';
-
-const CheckboxGroup = ({ label, options, selectedOptions, onChange, error }) => {
-  return (
-    <div className="mb-3">
-      <label className="form-label">{label}</label>
-      {options.map((option) => (
-        <div className="form-check" key={option}>
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id={option}
-            value={option}
-            checked={selectedOptions.includes(option)}
-            onChange={onChange}
-            aria-describedby={error ? `${option}-error` : undefined}
-          />
-          <label className="form-check-label" htmlFor={option}>
-            {option}
-          </label>
-        </div>
-      ))}
-      {error && <div className="invalid-feedback d-block">{error}</div>}
-    </div>
-  );
-};
-
-export default CheckboxGroup;
-```
-
-##### **RadioGroup Component (`RadioGroup.js`)**
-```javascript
-import React from 'react';
-
-const RadioGroup = ({ label, options, selectedOption, onChange, error }) => {
-  return (
-    <div className="mb-3">
-      <label className="form-label">{label}</label>
-      {options.map((option) => (
-        <div className="form-check" key={option}>
-          <input
-            className="form-check-input"
-            type="radio"
-            id={option}
-            name={label}
-            value={option}
-            checked={selectedOption === option}
-            onChange={onChange}
-            aria-describedby={error ? `${option}-error` : undefined}
-          />
-          <label className="form-check-label" htmlFor={option}>
-            {option}
-          </label>
-        </div>
-      ))}
-      {error && <div className="invalid-feedback d-block">{error}</div>}
-    </div>
-  );
-};
-
-export default RadioGroup;
-```
-
-##### **FormComponent (`FormComponent.js`)**
-- Integrate `Formik` for form management and `Yup` for validation.
-```javascript
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Container, Row, Col } from 'react-bootstrap';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import TextInput from './TextInput';
-import CheckboxGroup from './CheckboxGroup';
-import RadioGroup from './RadioGroup';
-import AutocompleteInput from './AutocompleteInput';
-import FolderPicker from './FolderPicker';
-
-const siteOptions = [
-  { value: 'https://example.com', label: 'https://example.com' },
-  { value: 'https://example.org', label: 'https://example.org' },
-];
+import SiteUrlInput from './components/SiteUrlInput';
+import AssetsCheckbox from './components/AssetsCheckbox';
+import ZipRadio from './components/ZipRadio';
+import DownloadLocation from './components/DownloadLocation';
+import SubmitButton from './components/SubmitButton';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 const validationSchema = Yup.object().shape({
-  siteUrl: Yup.object().required('Site URL is required'),
+  siteUrl: Yup.string().url('Invalid URL format').required('Site URL is required'),
   assets: Yup.array().min(1, 'At least one asset must be selected'),
-  zipContent: Yup.string().required('Please choose an option'),
+  zipContent: Yup.boolean(),
   downloadLocation: Yup.string().required('Download location is required'),
 });
 
-const FormComponent = () => {
+function App() {
+  const handleSubmit = (values, { setSubmitting }) => {
+    // Handle form submission here
+    console.log(values);
+    setSubmitting(false);
+  };
+
   return (
-    <div className="container mt-4">
-      <h1>Data Entry Form</h1>
-      <p>Please fill out the details below.</p>
-      <Formik
-        initialValues={{
-          siteUrl: null,
-          assets: [],
-          zipContent: 'no',
-          downloadLocation: ''
-        }}
-        validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
+    <Container className="mt-5">
+      <Row className="justify-content-center">
+        <Col md={8}>
+          <h1 className="text-center mb-4">SPO Site Downloader</h1>
+          <p className="text-center mb-4">Download SharePoint Online site content easily</p>
+          <Formik
+            initialValues={{
+              siteUrl: '',
+              assets: [],
+              zipContent: false,
+              downloadLocation: '',
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <SiteUrlInput />
+                <AssetsCheckbox />
+                <ZipRadio />
+                <DownloadLocation />
+                <SubmitButton isSubmitting={isSubmitting} />
+              </Form>
+            )}
+          </Formik>
+        </Col>
+      </Row>
+    </Container>
+  );
+}
+
+export default App;
+```
+
+Step 4: Create subcomponents
+
+1. Create `SiteUrlInput.js`:
+
+```jsx
+import React from 'react';
+import { Form } from 'react-bootstrap';
+import { Field, ErrorMessage } from 'formik';
+import axios from 'axios';
+
+const SiteUrlInput = () => {
+  const validateSiteUrl = async (value) => {
+    if (!value) {
+      return 'Site URL is required';
+    }
+    
+    if (!/^https?:\/\/.+/.test(value)) {
+      return 'Invalid URL format';
+    }
+    
+    try {
+      const response = await axios.get(`https://api.example.com/validate-url?url=${encodeURIComponent(value)}`);
+      if (!response.data.exists) {
+        return 'URL does not exist';
+      }
+    } catch (error) {
+      return 'Error validating URL';
+    }
+  };
+
+  return (
+    <Form.Group className="mb-3">
+      <Form.Label htmlFor="siteUrl">Site URL</Form.Label>
+      <Field
+        name="siteUrl"
+        validate={validateSiteUrl}
       >
-        {({ setFieldValue, values, errors, touched }) => (
-          <Form>
-            <Field
-              name="siteUrl"
-              render={({ field }) => (
-                <AutocompleteInput
-                  label="Site URL"
-                  id="siteUrl"
-                  options={siteOptions}
-                  value={values.siteUrl}
-                  onChange={(option) => setFieldValue('siteUrl', option)}
-                  error={touched.siteUrl && errors.siteUrl}
-                />
-              )}
-            />
-
-            <Field
-              name="assets"
-              render={({ field }) => (
-                <CheckboxGroup
-                  label="Assets"
-                  options={['All', 'Library', 'List', 'Folders']}
-                  selectedOptions={values.assets}
-                  onChange={(e) => {
-                    const { value, checked } = e.target;
-                    setFieldValue('assets', checked
-                      ? [...values.assets, value]
-                      : values.assets.filter((asset) => asset !== value)
-                    );
-                  }}
-                  error={touched.assets && errors.assets}
-                />
-              )}
-            />
-
-            <Field
-              name="zipContent"
-              render={({ field }) => (
-                <RadioGroup
-                  label="Do you want to zip the content?"
-                  options={['yes', 'no']}
-                  selectedOption={values.zipContent}
-                  onChange={(e) => setFieldValue('zipContent', e.target.value)}
-                  error={touched.zipContent && errors.zipContent}
-                />
-              )}
-            />
-
-            <Field
-              name="downloadLocation"
-              render={({ field }) => (
-                <FolderPicker
-                  label="Download Location"
-                  id="downloadLocation"
-                  onFolderSelect={(path) => setFieldValue('downloadLocation', path)}
-                  error={touched.downloadLocation && errors.downloadLocation}
-                />
-              )}
-            />
-
-            <button type="submit" className="btn btn-primary">Submit</button>
-          </Form>
+        {({ field, form }) => (
+          <Form.Control
+            {...field}
+            type="text"
+            id="siteUrl"
+            placeholder="Enter site URL"
+            isInvalid={form.errors.siteUrl && form.touched.siteUrl}
+            aria-describedby="siteUrlFeedback"
+          />
         )}
-      </Formik>
-    </div>
+      </Field>
+      <ErrorMessage name="siteUrl" component={Form.Control.Feedback} type="invalid" id="siteUrlFeedback" />
+    </Form.Group>
   );
 };
 
-export
-
- default FormComponent;
+export default SiteUrlInput;
 ```
 
-### **6. Accessibility and Validation Enhancements**
+2. Create `AssetsCheckbox.js`:
 
-#### **Accessibility Features**
-- **ARIA Attributes**: Ensure all form elements have appropriate ARIA attributes for accessibility.
-- **Error Handling**: Display error messages clearly for screen readers and visually.
+```jsx
+import React from 'react';
+import { Form } from 'react-bootstrap';
+import { Field, ErrorMessage } from 'formik';
 
-#### **Validation**
-- **Formik and Yup**: Use `Formik` for form state management and `Yup` for schema-based validation.
-- **Error Messages**: Display validation errors dynamically as users interact with the form fields.
-
-### **7. Integrate and Run the Application**
-
-#### **App Integration**
-- Update `src/App.js` to use `FormComponent`:
-  ```javascript
-  import React from 'react';
-  import FormComponent from './components/FormComponent';
-
-  function App() {
-    return (
-      <div className="App">
-        <FormComponent />
+const AssetsCheckbox = () => {
+  return (
+    <Form.Group className="mb-3">
+      <Form.Label>Assets</Form.Label>
+      <div>
+        <Field name="assets" type="checkbox" value="all" as={Form.Check} label="All" id="asset-all" />
+        <Field name="assets" type="checkbox" value="library" as={Form.Check} label="Library" id="asset-library" />
+        <Field name="assets" type="checkbox" value="list" as={Form.Check} label="List" id="asset-list" />
+        <Field name="assets" type="checkbox" value="folders" as={Form.Check} label="Folders" id="asset-folders" />
       </div>
-    );
-  }
+      <ErrorMessage name="assets" component={Form.Text} className="text-danger" />
+    </Form.Group>
+  );
+};
 
-  export default App;
-  ```
+export default AssetsCheckbox;
+```
 
-#### **Run the Application**
-- Start the development server:
-  ```bash
-  npm start
-  ```
-- Your application should now be running at `http://localhost:3000`.
+3. Create `ZipRadio.js`:
 
-### **Conclusion**
-This updated solution integrates advanced form validation and accessibility features, ensuring a more robust and user-friendly experience. The use of `Formik` and `Yup` simplifies state management and validation, while ARIA attributes enhance accessibility for all users.
+```jsx
+import React from 'react';
+import { Form } from 'react-bootstrap';
+import { Field } from 'formik';
+
+const ZipRadio = () => {
+  return (
+    <Form.Group className="mb-3">
+      <Form.Label>Do you want to zip the content?</Form.Label>
+      <div>
+        <Field name="zipContent" type="radio" value={false} as={Form.Check} label="No" id="zip-no" defaultChecked />
+        <Field name="zipContent" type="radio" value={true} as={Form.Check} label="Yes" id="zip-yes" />
+      </div>
+    </Form.Group>
+  );
+};
+
+export default ZipRadio;
+```
+
+4. Create `DownloadLocation.js`:
+
+```jsx
+import React from 'react';
+import { Form } from 'react-bootstrap';
+import { Field, ErrorMessage } from 'formik';
+
+const DownloadLocation = () => {
+  return (
+    <Form.Group className="mb-3">
+      <Form.Label htmlFor="downloadLocation">Download Location</Form.Label>
+      <Field name="downloadLocation">
+        {({ field, form }) => (
+          <Form.Control
+            {...field}
+            type="file"
+            id="downloadLocation"
+            webkitdirectory="true"
+            directory="true"
+            isInvalid={form.errors.downloadLocation && form.touched.downloadLocation}
+            aria-describedby="downloadLocationFeedback"
+          />
+        )}
+      </Field>
+      <ErrorMessage name="downloadLocation" component={Form.Control.Feedback} type="invalid" id="downloadLocationFeedback" />
+    </Form.Group>
+  );
+};
+
+export default DownloadLocation;
+```
+
+5. Create `SubmitButton.js`:
+
+```jsx
+import React from 'react';
+import { Button } from 'react-bootstrap';
+
+const SubmitButton = ({ isSubmitting }) => {
+  return (
+    <Button variant="primary" type="submit" disabled={isSubmitting}>
+      {isSubmitting ? 'Submitting...' : 'Submit'}
+    </Button>
+  );
+};
+
+export default SubmitButton;
+```
+
+Step 5: Update `src/App.css` for custom styling
+
+```css
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+```
+
+Step 6: Update `public/index.html` for favicon and title
+
+1. Add a favicon to your `public` folder (e.g., `favicon.ico`).
+2. Open `public/index.html` and update the `<head>` section:
+
+```html
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta
+    name="description"
+    content="SPO Site Downloader - Download SharePoint Online site content easily"
+  />
+  <title>SPO Site Downloader</title>
+</head>
+```
+
+Step 7: Run and test the application
+
+1. In the terminal, run:
+   ```
+   npm start
+   ```
+2. Open a web browser and navigate to `http://localhost:3000` to see your form.
+
+This implementation creates a responsive, accessible, and visually appealing form using React and Bootstrap. It includes all the required fields with appropriate validations, error handling, and styling. The form is split into subcomponents for better maintainability, and it uses Formik for form management and Yup for validation.
+
+Remember to replace the placeholder API URL in the `SiteUrlInput` component with your actual API endpoint for URL validation.
+
+Would you like me to explain or break down any part of this code further?
