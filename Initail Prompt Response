@@ -1,0 +1,127 @@
+Consider yourself as a developer with over 10 years of experience in UI/UX.
+
+Think for a minute & give very detailed instructions step by step to a novice to build a solution using Visual Studio Code.
+
+Your instructions should build a react data entry form using bootstrap. Form should have 
+1. Page Title
+2. Page Description
+3. Favicon
+4. Site URL: Auto Complete textbox 
+5. Assets: Checkboxes with options "All, Library, List, Folders"
+6. Do you want to zip the content?: Radio button
+7: Download Location: Folder Path
+8: Submit: Button
+
+
+
+To fix the issue where the selected value from the autocomplete component is not displaying correctly, we need to ensure that the selected option is properly reflected in the form's state and then displayed in the component.
+
+### **Steps to Fix the Autocomplete Issue**
+
+1. **Ensure Proper Handling of Selected Value**: Ensure that the selected value from the `react-select` component is being stored correctly in the form's state.
+
+2. **Display Selected Value**: The `value` prop of the `Select` component should be set to the current value in the form's state.
+
+Here’s the corrected code snippet for the `AutocompleteInput` component and its usage in `FormComponent`:
+
+#### **AutocompleteInput Component (`AutocompleteInput.js`)**
+Ensure that the `value` prop receives the entire selected option object and not just a part of it.
+
+```javascript
+import React from 'react';
+import Select from 'react-select';
+
+const AutocompleteInput = ({ label, id, options, value, onChange }) => {
+  return (
+    <div className="mb-3">
+      <label htmlFor={id} className="form-label">{label}</label>
+      <Select
+        inputId={id}
+        options={options}
+        value={value}
+        onChange={onChange}
+        isClearable
+        aria-labelledby={id}
+      />
+    </div>
+  );
+};
+
+export default AutocompleteInput;
+```
+
+#### **FormComponent (`FormComponent.js`)**
+Ensure that the `value` passed to the `AutocompleteInput` is an object that includes both the label and value properties, and `onChange` correctly updates the state.
+
+```javascript
+import React from 'react';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import AutocompleteInput from './AutocompleteInput';
+import CheckboxGroup from './CheckboxGroup';
+import RadioGroup from './RadioGroup';
+import FolderPicker from './FolderPicker';
+
+const siteOptions = [
+  { value: 'https://example.com', label: 'https://example.com' },
+  { value: 'https://example.org', label: 'https://example.org' },
+];
+
+const validationSchema = Yup.object().shape({
+  siteUrl: Yup.object().nullable().required('Site URL is required'),
+  assets: Yup.array().min(1, 'At least one asset must be selected'),
+  zipContent: Yup.string().required('Please choose an option'),
+  downloadLocation: Yup.string().required('Download location is required'),
+});
+
+const FormComponent = () => {
+  return (
+    <div className="container mt-4">
+      <h1>Data Entry Form</h1>
+      <p>Please fill out the details below.</p>
+      <Formik
+        initialValues={{
+          siteUrl: null,
+          assets: [],
+          zipContent: 'no',
+          downloadLocation: ''
+        }}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
+      >
+        {({ setFieldValue, values, errors, touched }) => (
+          <Form>
+            <Field
+              name="siteUrl"
+              render={({ field }) => (
+                <AutocompleteInput
+                  label="Site URL"
+                  id="siteUrl"
+                  options={siteOptions}
+                  value={values.siteUrl}
+                  onChange={(option) => setFieldValue('siteUrl', option)}
+                  error={touched.siteUrl && errors.siteUrl}
+                />
+              )}
+            />
+            {/* Other form fields */}
+            <button type="submit" className="btn btn-primary">Submit</button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+};
+
+export default FormComponent;
+```
+
+### **Explanation**
+
+- **`AutocompleteInput` Component**: The `value` prop is set to the selected option object (`{ value, label }`), which ensures the `react-select` component displays the correct selected value.
+- **`Formik` Integration**: In `FormComponent`, `setFieldValue('siteUrl', option)` updates the form's state with the selected option object, which includes both `value` and `label` properties.
+- **Validation**: The `validationSchema` ensures that `siteUrl` is required and must be an object (or `null` if not selected).
+
+By following these corrections, the selected option should now correctly appear in the autocomplete field.
