@@ -291,5 +291,102 @@ Here is a detailed step-by-step guide to build the 'SPO Site Downloader' form us
             if (Object.keys(newErrors).length > 0) {
                 setErrors(newErrors);
             } else {
-                // Submit form data to the database
+                // Submit form data to the database                
                 console.log(formData);
+                // Here you can add the logic to submit the form data to the database
+                // Example: axios.post('/api/submit', formData)
+            }
+        };
+
+        return (
+            <div className="container">
+                <PageTitle />
+                <PageDescription />
+                <form>
+                    <SiteURL handleInputChange={handleInputChange} errors={errors} />
+                    <Assets handleInputChange={handleInputChange} errors={errors} />
+                    <ZipContent handleInputChange={handleInputChange} />
+                    <DownloadLocation handleInputChange={handleInputChange} errors={errors} />
+                    <SubmitButton handleSubmit={handleSubmit} />
+                </form>
+            </div>
+        );
+    };
+
+    export default MainForm;
+    ```
+
+### Step 4: Create Dummy JSON Data for Autocomplete
+
+Create a `data` folder in the `src` directory and add a `sites.json` file with the following dummy data:
+
+```json
+[
+    "https://example.com/site1",
+    "https://example.com/site2",
+    "https://example.com/site3"
+]
+```
+
+### Step 5: Update App Component
+
+1. **Update `src/App.js`**:
+    ```javascript
+    import React from 'react';
+    import MainForm from './components/MainForm';
+
+    function App() {
+        return (
+            <div className="App">
+                <MainForm />
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+
+### Step 6: Run the Project
+
+1. **Start the Development Server**:
+    ```bash
+    npm start
+    ```
+
+### Additional Enhancements
+
+1. **Error Handling**:
+    - Ensure that error messages are displayed dynamically as users interact with the form fields. Use Bootstrap's `text-danger` class for visibility.
+
+2. **Form Styling**:
+    - Use Bootstrap's grid system to align the form elements neatly.
+    - Ensure the form is fully responsive and visually appealing.
+
+### Example CSS (Optional)
+
+If you need custom styles, create a `src/App.css` file and import it in `src/App.js`:
+
+```css
+.suggestions {
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.suggestions div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestions div:hover {
+    background-color: #f0f0f0;
+}
+```
+
+```javascript
+import './App.css';
+```
+
+### Conclusion
+
+This detailed guide provides step-by-step instructions to build the 'SPO Site Downloader' form using React and Bootstrap. It includes creating subcomponents, adding validation, handling errors, and ensuring the form is responsive and user-friendly. You can further customize the form and add additional functionality as needed.
