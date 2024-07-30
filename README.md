@@ -477,6 +477,17 @@ While working within the constraints of web browsers, this approach attempts to 
 
 
 
+Switching the `DownloadLocation` component to a plain text field simplifies the user interaction and allows for direct input of folder paths. However, validating if a path exists from a web application is challenging due to browser security restrictions. You won't be able to directly access the file system from a web browser for security reasons.
+
+Here’s how you can implement the `DownloadLocation` component as a plain text field, and perform client-side validation. For server-side validation, you would need a backend API to check if the path exists.
+
+### Updated `DownloadLocation` Component
+
+**1. Client-Side Component:**
+
+In this component, users can input the directory path manually. The validation will be limited to checking if the input is empty or has an invalid format, but it won't verify if the path actually exists on the user's filesystem.
+
+```javascript
 // src/components/DownloadLocation.js
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -520,3 +531,14 @@ function DownloadLocation({ onLocationChange }) {
 }
 
 export default DownloadLocation;
+```
+
+```
+
+### Summary
+
+- **Client-Side Validation:** This will check if the input is not empty and if the format is valid.
+- **Server-Side Validation:** Implement an API to verify if the path exists on the server.
+- **User Experience:** Clearly inform users about what is expected for the path format and handle errors gracefully.
+
+This approach provides a more user-friendly experience for inputting paths while leveraging server-side capabilities for validation.
