@@ -390,3 +390,132 @@ import './App.css';
 ### Conclusion
 
 This detailed guide provides step-by-step instructions to build the 'SPO Site Downloader' form using React and Bootstrap. It includes creating subcomponents, adding validation, handling errors, and ensuring the form is responsive and user-friendly. You can further customize the form and add additional functionality as needed.
+
+dropdownlocation.json
+[
+    "Save Location Path 1",
+    "Save Location Path 2",
+    "Save Location Path 3",
+    "Save Location Path 4",
+    "Save Location Path 5"
+]
+
+DownloadLocation.js
+import React, { useState, useEffect } from 'react';
+import dropdownData from '../data/dropdownlocation.json';
+
+const DownloadLocation = ({ handleInputChange, errors }) => {
+    const [selectedLocation, setSelectedLocation] = useState("");
+
+    useEffect(() => {
+        if (selectedLocation) {
+            handleInputChange({
+                target: {
+                    name: 'downloadLocation',
+                    value: selectedLocation,
+                }
+            });
+        }
+    }, [selectedLocation, handleInputChange]);
+
+    return (
+        <div className="form-group">
+            <label htmlFor="downloadLocation">Download Location</label>
+            <select
+                className={`form-control ${errors.downloadLocation ? 'is-invalid' : ''}`}
+                id="downloadLocation"
+                name="downloadLocation"
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+            >
+                <option value="">Select a location</option>
+                {dropdownData.map((location, index) => (
+                    <option key={index} value={location}>
+                        {location}
+                    </option>
+                ))}
+            </select>
+            {errors.downloadLocation && <div className="text-danger">{errors.downloadLocation}</div>}
+        </div>
+    );
+};
+
+export default DownloadLocation;
+
+
+
+Final Adjustments
+Ensure that DownloadLocation.js is properly imported and used in MainForm.js as before. Here's the final MainForm.js for reference:
+import React, { useState } from 'react';
+import PageTitle from './PageTitle';
+import PageDescription from './PageDescription';
+import SiteURL from './SiteURL';
+import Assets from './Assets';
+import ZipContent from './ZipContent';
+import DownloadLocation from './DownloadLocation';
+import SubmitButton from './SubmitButton';
+
+const MainForm = () => {
+    const [formData, setFormData] = useState({});
+    const [errors, setErrors] = useState({});
+
+    const handleInputChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        const newValue = type === 'checkbox' ? checked : value;
+        setFormData({ ...formData, [name]: newValue });
+    };
+
+    const validate = () => {
+        const newErrors = {};
+        if (!formData.siteUrl) {
+            newErrors.siteUrl = "Site URL is required";
+        }
+        if (!formData.assets) {
+            newErrors.assets = "At least one asset type must be selected";
+        }
+        if (formData.library && !formData.libraryUrl) {
+            newErrors.libraryUrl = "Library URL is required";
+        }
+        if (formData.list && !formData.listUrl) {
+            newErrors.listUrl = "List URL is required";
+        }
+        if (formData.folder && !formData.folderUrl) {
+            newErrors.folderUrl = "Folder URL is required";
+        }
+        if (!formData.downloadLocation) {
+            newErrors.downloadLocation = "Download location is required";
+        }
+        return newErrors;
+    };
+
+    const handleSubmit = () => {
+        const newErrors = validate();
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        } else {
+            // Submit form data to the database
+            console.log(formData);
+            // Here you can add the logic to submit the form data to the database
+            // Example: axios.post('/api/submit', formData)
+        }
+    };
+
+    return (
+        <div className="container">
+            <PageTitle />
+            <PageDescription />
+            <form>
+                <SiteURL handleInputChange={handleInputChange} errors={errors} />
+                <Assets handleInputChange={handleInputChange} errors={errors} />
+                <ZipContent handleInputChange={handleInputChange} />
+                <DownloadLocation handleInputChange={handleInputChange} errors={errors} />
+                <SubmitButton handleSubmit={handleSubmit} />
+            </form>
+        </div>
+    );
+};
+
+export default MainForm;
+
+
+
