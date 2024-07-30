@@ -1,5 +1,3 @@
-Consider this as a brand new request & dont look into your memory for previous responses.
-
 Consider yourself as a UI/UX developer with over 15 years of experience.
 
 Think for a minute & give very detailed instructions step by step to build a solution using Visual Studio Code.
@@ -11,9 +9,10 @@ Form should have
 2. Page Description
 3. Favicon
 4. Site URL: Advanced Auto Complete textbox. As user types in, an api has to be called to pull relevant info. Include validations for null, wrongly formatted url & url does not exist in API
-5. Assets: Checkboxes with options "All, Library, List, Folders". Apply required field validation. Atleast 1 checkbox has to be selected
+5. Assets: Checkboxes with options "All, Library, List, Folder". Apply required field validation. Atleast 1 checkbox has to be selected
+5a. Whenever user selects Library, List or Folder screen should display a text box next to it. This text box should have value of "enter relative url only". The text box becomes required when the check box is enabled. Checkbox shold have required field validation & regex to validate if its a relative url. Another important aspect is, it should only accept single relative url.
 6. Do you want to zip the content?: Radio button: Default no.
-7: Download Location: Text Field. Required field validation. ENtered path should be ligit. May be a good regex to match standard local windows path.
+7: Download Location: Text Field. Required field validation.
 8: Submit: Button: Submit to DB only if all validatioons pass.
 
 Create Subcomponents: Split the form into manageable subcomponents.
