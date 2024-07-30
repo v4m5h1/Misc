@@ -228,42 +228,43 @@ Create a folder structure for components and assets:
 - **Implementation:**
   ```javascript
   // src/components/DownloadLocation.js
-  import React, { useState } from 'react';
-  import { Form } from 'react-bootstrap';
+  // src/components/DownloadLocation.js
+import React, { useState } from 'react';
+import { Form } from 'react-bootstrap';
 
-  function DownloadLocation({ onLocationChange }) {
-    const [location, setLocation] = useState('');
-    const [error, setError] = useState('');
+function DownloadLocation({ onLocationChange }) {
+  const [location, setLocation] = useState('');
+  const [error, setError] = useState('');
 
-    const handleLocationChange = (e) => {
-      const path = e.target.value;
-      setLocation(path);
-      onLocationChange(path);
+  const handleLocationChange = (e) => {
+    const path = e.target.value;
+    setLocation(path);
+    onLocationChange(path);
 
-      if (!path) {
-        setError('Please select a download location');
-      } else {
-        setError('');
-      }
-    };
+    if (!path) {
+      setError('Please enter a download location');
+    } else {
+      setError('');
+    }
+  };
 
-    return (
-      <Form.Group controlId="downloadLocation">
-        <Form.Label>Download Location</Form.Label>
-        <Form.Control
-          type="file"
-          webkitdirectory=""
-          directory=""
-          value={location}
-          onChange={handleLocationChange}
-          isInvalid={!!error}
-        />
-        <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
-      </Form.Group>
-    );
-  }
+  return (
+    <Form.Group controlId="downloadLocation">
+      <Form.Label>Download Location</Form.Label>
+      <Form.Control
+        type="text"
+        value={location}
+        onChange={handleLocationChange}
+        placeholder="Enter folder path or select from dialog"
+        isInvalid={!!error}
+      />
+      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+    </Form.Group>
+  );
+}
 
-  export default DownloadLocation;
+export default DownloadLocation;
+
   ```
 
 #### **4.6 Submit Button Component**
