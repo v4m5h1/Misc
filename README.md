@@ -226,9 +226,8 @@ Create a folder structure for components and assets:
 
 - **Purpose:** Input for selecting download folder path with validation.
 - **Implementation:**
-  ```javascript
-  // src/components/DownloadLocation.js
-  // src/components/DownloadLocation.js
+  ```
+// src/components/DownloadLocation.js
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 
@@ -236,15 +235,21 @@ function DownloadLocation({ onLocationChange }) {
   const [location, setLocation] = useState('');
   const [error, setError] = useState('');
 
-  const handleLocationChange = (e) => {
-    const path = e.target.value;
-    setLocation(path);
-    onLocationChange(path);
+  const handleDirectoryChange = (e) => {
+    const files = e.target.files;
+    if (files.length > 0) {
+      // Extract the directory path from the first file's path
+      const filePath = files[0].webkitRelativePath || files[0].name;
+      const pathSegments = filePath.split('/');
+      pathSegments.pop(); // Remove the file name to get the directory path
+      const directoryPath = pathSegments.join('/');
+      
+      setLocation(directoryPath);
+      onLocationChange(directoryPath);
 
-    if (!path) {
-      setError('Please enter a download location');
-    } else {
       setError('');
+    } else {
+      setError('Please select a directory');
     }
   };
 
@@ -252,13 +257,14 @@ function DownloadLocation({ onLocationChange }) {
     <Form.Group controlId="downloadLocation">
       <Form.Label>Download Location</Form.Label>
       <Form.Control
-        type="text"
-        value={location}
-        onChange={handleLocationChange}
-        placeholder="Enter folder path or select from dialog"
+        type="file"
+        webkitdirectory="true"
+        directory=""
+        onChange={handleDirectoryChange}
         isInvalid={!!error}
       />
       <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+      {location && <div>Selected Directory: {location}</div>}
     </Form.Group>
   );
 }
