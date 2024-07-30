@@ -1,0 +1,28 @@
+Consider this as a brand new request & dont look into your memory for previous responses.
+
+Consider yourself as a UI/UX developer with over 15 years of experience.
+
+Think for a minute & give very detailed instructions step by step to build a solution using Visual Studio Code.
+
+Your instructions should build a react data entry form named SPO Site Downloader using bootstrap & react. 
+
+Form should have 
+1. Page Title
+2. Page Description
+3. Favicon
+4. Site URL: Advanced Auto Complete textbox. As user types in, an api has to be called to pull relevant info. Include validations for null, wrongly formatted url & url does not exist in API
+5. Assets: Checkboxes with options "All, Library, List, Folders". Apply required field validation. Atleast 1 checkbox has to be selected
+6. Do you want to zip the content?: Radio button: Default no.
+7: Download Location: Text Field. Required field validation. ENtered path should be ligit. May be a good regex to match standard local windows path.
+8: Submit: Button: Submit to DB only if all validatioons pass.
+
+Create Subcomponents: Split the form into manageable subcomponents.
+For styling the elements use form controls from bootstrap
+
+Error Handling: Display validation error messages clearly. Make fields highlight in error using bootstrap classes. Display validation errors dynamically as users interact with the form fields.
+
+The form should be fully responsive, visually appealing, and make good use of Bootstrap's classes and components. Include appropriate placeholders, labels, and validation messages. Use Bootstrap's grid system to align the form elements neatly, and ensure the form is accessible and user-friendly.
+
+Enhance the validation logic in subcomponents and ensure dynamic error messages are displayed using Bootstrap classes like text-danger for visibility.
+
+The form submission function (handleSubmit) should ensure that all fields are validated and show error messages if any validation fails. All validations fails should show up at once.
