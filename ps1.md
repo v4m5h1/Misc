@@ -1,4 +1,4 @@
-Here’s a PowerShell script that will accomplish the task:
+Here’s the modified PowerShell script that copies files into folders instead of zipping them:
 
 ```powershell
 param (
@@ -6,84 +6,73 @@ param (
     [string]$SaveFolderPath
 )
 
-function Create-Zip {
+function Create-FolderAndCopyFiles {
     param (
-        [string]$ZipFilePath,
-        [string]$FilesToZip
+        [string]$DestinationFolderPath,
+        [array]$FilesToCopy
     )
 
-    $shellApplication = New-Object -ComObject shell.application
-    $zipFile = $shellApplication.NameSpace($ZipFilePath)
+    # Create the destination folder if it doesn't exist
+    if (-not (Test-Path $DestinationFolderPath)) {
+        New-Item -Path $DestinationFolderPath -ItemType Directory | Out-Null
+    }
 
-    foreach ($file in $FilesToZip) {
-        $zipFile.CopyHere($file.FullName)
-        Start-Sleep -Milliseconds 500  # To give the shell enough time to process the file copy
+    # Copy each file to the destination folder
+    foreach ($file in $FilesToCopy) {
+        $destinationFilePath = [System.IO.Path]::Combine($DestinationFolderPath, $file.Name)
+        Copy-Item -Path $file.FullName -Destination $destinationFilePath
     }
 }
 
 $files = Get-ChildItem -Path $SourceFolderPath -Recurse -File
 $totalSize = 0
-$zipIndex = 1
-$filesToZip = @()
+$folderIndex = 1
+$filesToCopy = @()
 $folderName = Split-Path $SourceFolderPath -Leaf
 
 foreach ($file in $files) {
     $totalSize += $file.Length
-    $filesToZip += $file
+    $filesToCopy += $file
 
     if ($totalSize -ge 20MB) {
-        $zipFileName = "$SaveFolderPath\$folderName-$zipIndex.zip"
-        $zipFilePath = [System.IO.Path]::Combine($SaveFolderPath, "$folderName-$zipIndex.zip")
+        $newFolderPath = [System.IO.Path]::Combine($SaveFolderPath, "$folderName-$folderIndex")
+        Create-FolderAndCopyFiles -DestinationFolderPath $newFolderPath -FilesToCopy $filesToCopy
 
-        # Create an empty zip file
-        Add-Type -AssemblyName System.IO.Compression.FileSystem
-        [System.IO.Compression.ZipFile]::Open($zipFilePath, 'Create').Dispose()
-
-        # Add files to the zip
-        Create-Zip -ZipFilePath $zipFilePath -FilesToZip $filesToZip
-
-        $zipIndex++
+        $folderIndex++
         $totalSize = 0
-        $filesToZip = @()
+        $filesToCopy = @()
     }
 }
 
 # Handle remaining files
-if ($filesToZip.Count -gt 0) {
-    $zipFileName = "$SaveFolderPath\$folderName-$zipIndex.zip"
-    $zipFilePath = [System.IO.Path]::Combine($SaveFolderPath, "$folderName-$zipIndex.zip")
-
-    # Create an empty zip file
-    Add-Type -AssemblyName System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::Open($zipFilePath, 'Create').Dispose()
-
-    # Add files to the zip
-    Create-Zip -ZipFilePath $zipFilePath -FilesToZip $filesToZip
+if ($filesToCopy.Count -gt 0) {
+    $newFolderPath = [System.IO.Path]::Combine($SaveFolderPath, "$folderName-$folderIndex")
+    Create-FolderAndCopyFiles -DestinationFolderPath $newFolderPath -FilesToCopy $filesToCopy
 }
 ```
 
-### How the Script Works:
+### How the Modified Script Works:
 
 1. **Parameters**:
    - `SourceFolderPath`: The path to the source folder.
-   - `SaveFolderPath`: The path where the zip files will be saved.
+   - `SaveFolderPath`: The path where the folders will be created and files will be copied.
 
 2. **Script Logic**:
    - The script gets all files from the source folder recursively.
-   - It then accumulates files until the total size reaches or exceeds 20MB.
-   - Once the 20MB threshold is reached, it creates a new zip file with the name pattern `foldername-index.zip`.
-   - It then starts accumulating files for the next zip, and this process continues until all files are processed.
+   - It accumulates files until the total size reaches or exceeds 20MB.
+   - Once the 20MB threshold is reached, it creates a new folder with the name pattern `foldername-index` and copies the accumulated files into that folder.
+   - The process repeats until all files are processed.
 
-3. **Zip File Creation**:
-   - The `Create-Zip` function creates and adds files to a zip archive.
+3. **Folder Creation and File Copying**:
+   - The `Create-FolderAndCopyFiles` function creates a new folder and copies the specified files into it.
 
 4. **Remaining Files**:
-   - If there are any remaining files after the loop that didn’t reach 20MB, they are zipped into the final zip file.
+   - If there are any remaining files after the loop that didn’t reach 20MB, they are copied into the final folder.
 
 ### Example Usage:
 
 ```powershell
-.\YourScript.ps1 -SourceFolderPath "C:\users\addagudu\downloads\od files\victor" -SaveFolderPath "C:\users\addagudu\downloads\zipfiles"
+.\YourScript.ps1 -SourceFolderPath "C:\users\addagudu\downloads\od files\victor" -SaveFolderPath "C:\users\addagudu\downloads\outputfolders"
 ```
 
-This will create zip files in the `C:\users\addagudu\downloads\zipfiles` folder, named `victor-1.zip`, `victor-2.zip`, etc.
+This will create folders in the `C:\users\addagudu\downloads\outputfolders` folder, named `victor-1`, `victor-2`, etc., and the files will be distributed among these folders according to the 20MB limit.
