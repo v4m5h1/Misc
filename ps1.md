@@ -1,78 +1,80 @@
-Here’s the modified PowerShell script that copies files into folders instead of zipping them:
+Certainly! Here’s a PowerShell script that splits a large log file into smaller files, each with a size of 20MB:
 
 ```powershell
-param (
-    [string]$SourceFolderPath,
-    [string]$SaveFolderPath
-)
+# Define the input file path
+$inputFilePath = "C:\path\to\your\logfile.log"
 
-function Create-FolderAndCopyFiles {
-    param (
-        [string]$DestinationFolderPath,
-        [array]$FilesToCopy
-    )
+# Define the output directory where the split files will be saved
+$outputDirectory = "C:\path\to\output\directory"
 
-    # Create the destination folder if it doesn't exist
-    if (-not (Test-Path $DestinationFolderPath)) {
-        New-Item -Path $DestinationFolderPath -ItemType Directory | Out-Null
+# Define the desired file size for each split file (20MB)
+$chunkSize = 20MB
+
+# Create the output directory if it doesn't exist
+if (-not (Test-Path $outputDirectory)) {
+    New-Item -ItemType Directory -Path $outputDirectory
+}
+
+# Initialize variables
+$bufferSize = 1MB  # Read in 1MB chunks
+$fileNumber = 0
+$bytesWritten = 0
+$outputFileStream = $null
+
+# Open the input file stream
+$inputFileStream = [System.IO.File]::OpenRead($inputFilePath)
+
+try {
+    # Loop through the input file and split it into smaller files
+    while ($true) {
+        # Create a new output file if necessary
+        if ($null -eq $outputFileStream -or $bytesWritten -ge $chunkSize) {
+            if ($outputFileStream) {
+                $outputFileStream.Close()
+            }
+            $fileNumber++
+            $outputFileName = [System.IO.Path]::Combine($outputDirectory, "logfile_part_$fileNumber.log")
+            $outputFileStream = [System.IO.File]::Create($outputFileName)
+            $bytesWritten = 0
+        }
+
+        # Create a buffer to read data into
+        $buffer = New-Object byte[] $bufferSize
+
+        # Read data from the input file
+        $bytesRead = $inputFileStream.Read($buffer, 0, $bufferSize)
+
+        # Break the loop if we've reached the end of the input file
+        if ($bytesRead -eq 0) {
+            break
+        }
+
+        # Write data to the output file
+        $outputFileStream.Write($buffer, 0, $bytesRead)
+        $bytesWritten += $bytesRead
     }
-
-    # Copy each file to the destination folder
-    foreach ($file in $FilesToCopy) {
-        $destinationFilePath = [System.IO.Path]::Combine($DestinationFolderPath, $file.Name)
-        Copy-Item -Path $file.FullName -Destination $destinationFilePath
+} finally {
+    # Close the file streams
+    if ($inputFileStream) {
+        $inputFileStream.Close()
+    }
+    if ($outputFileStream) {
+        $outputFileStream.Close()
     }
 }
 
-$files = Get-ChildItem -Path $SourceFolderPath -Recurse -File
-$totalSize = 0
-$folderIndex = 1
-$filesToCopy = @()
-$folderName = Split-Path $SourceFolderPath -Leaf
-
-foreach ($file in $files) {
-    $totalSize += $file.Length
-    $filesToCopy += $file
-
-    if ($totalSize -ge 20MB) {
-        $newFolderPath = [System.IO.Path]::Combine($SaveFolderPath, "$folderName-$folderIndex")
-        Create-FolderAndCopyFiles -DestinationFolderPath $newFolderPath -FilesToCopy $filesToCopy
-
-        $folderIndex++
-        $totalSize = 0
-        $filesToCopy = @()
-    }
-}
-
-# Handle remaining files
-if ($filesToCopy.Count -gt 0) {
-    $newFolderPath = [System.IO.Path]::Combine($SaveFolderPath, "$folderName-$folderIndex")
-    Create-FolderAndCopyFiles -DestinationFolderPath $newFolderPath -FilesToCopy $filesToCopy
-}
+Write-Host "Log file has been successfully split into smaller files."
 ```
 
-### How the Modified Script Works:
+### How the Script Works:
+1. **Input and Output Paths**: Set the path of your input log file and the output directory where the smaller files will be stored.
+2. **Chunk Size**: The script splits the file into 20MB chunks.
+3. **Buffer Size**: The script reads the input file in 1MB chunks to avoid excessive memory usage.
+4. **Splitting Logic**: The script loops through the input file, writing each chunk to a new file when the current file size reaches 20MB.
 
-1. **Parameters**:
-   - `SourceFolderPath`: The path to the source folder.
-   - `SaveFolderPath`: The path where the folders will be created and files will be copied.
+### How to Use the Script:
+1. Copy the script to a `.ps1` file, e.g., `SplitLogFile.ps1`.
+2. Update the `$inputFilePath` and `$outputDirectory` variables with your file paths.
+3. Run the script in PowerShell.
 
-2. **Script Logic**:
-   - The script gets all files from the source folder recursively.
-   - It accumulates files until the total size reaches or exceeds 20MB.
-   - Once the 20MB threshold is reached, it creates a new folder with the name pattern `foldername-index` and copies the accumulated files into that folder.
-   - The process repeats until all files are processed.
-
-3. **Folder Creation and File Copying**:
-   - The `Create-FolderAndCopyFiles` function creates a new folder and copies the specified files into it.
-
-4. **Remaining Files**:
-   - If there are any remaining files after the loop that didn’t reach 20MB, they are copied into the final folder.
-
-### Example Usage:
-
-```powershell
-.\YourScript.ps1 -SourceFolderPath "C:\users\addagudu\downloads\od files\victor" -SaveFolderPath "C:\users\addagudu\downloads\outputfolders"
-```
-
-This will create folders in the `C:\users\addagudu\downloads\outputfolders` folder, named `victor-1`, `victor-2`, etc., and the files will be distributed among these folders according to the 20MB limit.
+This will create multiple files in the output directory, each containing 20MB of the original log file.
