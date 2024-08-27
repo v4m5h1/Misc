@@ -1,27 +1,53 @@
 Consider yourself as a UI/UX developer with over 15 years of experience.
 
-Think for a minute & give very detailed instructions step by step to build a solution using Visual Studio Code.
+Take a minute to review the attachment for design expectations & give very detailed instructions step by step to build a solution using Visual Studio Code.
 
 Your instructions should build a react data entry form named SPO Site Downloader using bootstrap & react. 
 
-Form should have 
-1. Page Title
-2. Page Description
-3. Favicon
-4. Site URL: Advanced Auto Complete textbox. Include a dummy json file & autocomplete against values in JSON. Include validations for null, wrongly formatted url & url does not exist in JSON
-5. Assets: Checkboxes with options "All, Library, List, Folder". Apply required field validation. Atleast 1 checkbox has to be selected
-5a. Whenever user selects Library, List or Folder, screen should display a text box next to it. This text box should have value of "enter relative url only". The text box becomes required when the check box is enabled. Checkbox shold have required field validation & regex to validate if its a relative url. Another important aspect is, it should only accept single relative url.
+Solution should aim at being a single page application with  
+1. Top Navigation just like in the image. It should have 3 links "New Download Request", "New Upload Request", "All Requests". Top navigation should be configurable from a config file.
+2. Page Title. This has to be dynamic with selection on top navigation
+3. Footer exactly as in the image. Same styling & language. This is Static & does not change.
+
+When New Download Request is clicked, Page should call an api configured in config file & the response should be available for all through the sessions for usage. The response will be a json with list of objects, each object will have siteurl & siteid values
+After that page should load with below UI elements
+1. Site URL: Advanced Auto Complete textbox. As user types in, show matching relevant URL's from the values retreived from api on page load. Include validations for null, wrongly formatted url & url does not exist in retreived data. Once user selects a url, keep associated siteid handy to pass during submission.
+2. Assets: Radio buttons with options "Site, Library, List, Folder". Apply required field validation. 
+2a. Whenever user selects Library, List or Folder, screen should display 2 text boxes next to it. One text box should have value of "enter asset name to download" , another text box should have value of "enter relative url only". Both text box becomes required when the radio button is enabled. radio shold have required field validation & regex to validate if its a relative url. Another important aspect is, it should only accept single relative url.
 6. Do you want to zip the content?: Radio button: Default no.
 7: Download Location: Text Field. Required field validation.
+9: Comments: Text field. Not required.
 8: Submit: Button: Submit to DB only if all validatioons pass.
 
 Create Subcomponents: Split the form into manageable subcomponents.
-For styling the elements use form controls from bootstrap
+For styling the elements use form controls from bootstrap and make sure to style just like attached image.
 
-Error Handling: Display validation error messages clearly. Ensure all error messages are dynamically displayed using Bootstrap's text-danger class. Display validation errors dynamically as users interact with the form fields.
+Error Handling: Display validation error messages clearly. Ensure all error messages are dynamically displayed using Bootstrap's text-danger class. Display validation errors dynamically as users interact with the form fields. When error is resolved, text-danger has to be cleared. check for errors when focus-out
 
 The form should be fully responsive, visually appealing, and make good use of Bootstrap's classes and components. Include appropriate placeholders, labels, and validation messages. Use Bootstrap's grid system to align the form elements neatly, and ensure the form is accessible and user-friendly.
 
 Enhance the validation logic in subcomponents and ensure dynamic error messages are displayed using Bootstrap classes like text-danger for visibility.
 
 The form submission function (handleSubmit) should ensure that all fields are validated and show error messages if any validation fails. All validations fails should show up at once.
+
+When there are no validation errors, enable "Submit" button. On button click all values from form Site Url, Site Id, Asset, Zip, download location, justification has to be available in json format below.
+
+{
+	"siteDownloadRequest": {
+	"siteUrl": "https://msT-2849",
+	"assetType": "List",
+	"sourceRequestId": "" ,
+	"sourceSystemCallbackSproc": "",	
+	"downloadRootLocation": "C: \\Users \\ais\\Desktop\\FileDownload",
+	"comments": "",		
+	"requestJustification": "Justification",
+	"isZipRequired": 	
+	},
+	"siteDownloadAssets": [
+		{
+			"assetName": "Test List 007"
+			"assetUrl": "sites\\0ents\ \Unicode Names",
+			"comments":
+		}
+	]
+}
