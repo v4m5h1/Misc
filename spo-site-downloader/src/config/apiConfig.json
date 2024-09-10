@@ -1,0 +1,7 @@
+{
+    "apiBaseUrl": "https://example.com/api",
+    "endpoints": {
+        "getSiteUrls": "/site-urls",
+        "submitRequest": "/submit-request"
+    }
+}
