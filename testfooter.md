@@ -24,3 +24,5 @@ export default Footer;
   font-size: 12px;
   color: #666;
 }
+
+const urlRegex = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]$/;
