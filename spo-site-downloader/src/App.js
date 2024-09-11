@@ -1,25 +1,29 @@
-import React, { useState } from 'react';
-import NavBar from './components/NavBar';
-import Footer from './components/Footer';
-import NewDownloadRequest from './components/NewDownloadRequest';
-import navConfig from './config/navConfig.json';
-import FormFile from './components/FormFile';
-function App() {
-  // const [pageTitle, setPageTitle] = useState("New Download Request");
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import HomePage from "./components/Home";
+// import FormPage from "./components/FormPage"; // Import your form page component
+import NewDown from "./components/NewDownload";
+import config from './config/navConfig.json'
+import NavBar from './components/NavBar'
+import Footer from './components/Footer'
+import FormFile from "./components/FormFile";
+import Allrequests from "./components/Allrequests";
 
-  // const handleNavClick = (title) => {
-  //   setPageTitle(title);
-  // };
-
+const App = () => {
   return (
-    <div>
-      <FormFile/>
-      {/* <NavBar config={navConfig} onNavClick={handleNavClick} />
-      <h1 className="text-center my-4">{pageTitle}</h1>
-      {pageTitle === "New Download Request" && <NewDownloadRequest />}
-      <Footer /> */}
-    </div>
+    
+    <Router>
+    <NavBar config={config} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/form" element={<FormFile />} />
+        <Route path="/newdowload" element={<NewDown />} />
+        <Route path="/allrequest" element={<Allrequests />} />
+        {/* Add other routes here */}
+      </Routes>
+      <Footer/>
+    </Router>
   );
-}
+};
 
 export default App;
