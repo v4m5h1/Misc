@@ -2,11 +2,11 @@
     "navLinks":[
         {
             "name":"New Download Request",
-            "path":""
+            "path":"/newdowload"
         },
         {
             "name":"All Requests",
-            "path":""
+            "path":"/allrequest"
         },
         {
             "name":"New Download Request",

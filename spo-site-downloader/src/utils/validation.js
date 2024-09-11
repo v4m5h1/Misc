@@ -1,20 +1,15 @@
-export const validateForm = ({ siteUrl, assetType, downloadLocation }, availableUrls) => {
+export const validateForm = (data) => {
   const errors = {};
-
-  // Site URL validation
-  if (!siteUrl) {
-    errors.siteUrl = 'Site URL is required.';
-  } else if (!availableUrls.some(url => url.siteUrl === siteUrl)) {
-    errors.siteUrl = 'Site URL is not valid.';
+  if (!data.siteURL) {
+    errors.siteURL = "Site URL is required.";
+  } else if (!/^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(data.siteURL)) {
+    errors.siteURL = "Invalid URL format.";
   }
 
-  // Asset Type validation
-  if (!assetType) {
-    errors.assetType = 'Asset type is required.';
-  } else if (assetType !== 'Site' && !downloadLocation) {
-    errors.downloadLocation = 'Download location is required for the selected asset type.';
+  // More validations based on form requirements
+  if (!data.selection) {
+    errors.selection = "Selection is required.";
   }
 
   return errors;
 };
-
