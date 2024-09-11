@@ -13,7 +13,18 @@ const FormFile = () => {
     } = useFormFile(apiConfig);
 
     const isAssetsEnabled = ["List", "Folder", "Library"].includes(formData.selection);
-
+    const getAssetLabel = () => {
+        switch (formData.selection) {
+            case "List":
+                return "Enter List Name";
+            case "Folder":
+                return "Enter Folder Name";
+            case "Library":
+                return "Enter Library Name";
+            default:
+                return "Enter Library, List, or Folder Name";
+        }
+    };
     return (
         <Container className="mt-5 mb-5 p-4 shadow-lg bg-white rounded" style={{ maxWidth: "800px", borderRadius: "40px" }}>
             <h4 className="text-center mb-4">SPO Site Download</h4>
@@ -52,17 +63,17 @@ const FormFile = () => {
                 {isAssetsEnabled && formData.formGroups.map((group, index) => (
                     <div key={index} className="mb-3">
                         <Form.Group className="mb-3">
-                            <Form.Label>Enter Library or List or Folder Name</Form.Label>
+                        <Form.Label>{getAssetLabel()}</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="relativeURL"
                                 value={group.relativeURL || ''}
-                                placeholder="Enter relative URL for library to download"
+                                placeholder={`Enter relative URL for ${formData.selection.toLowerCase()}`}
                                 onChange={e => handleGroupChange(index, e)}
                                 isInvalid={!!errors[`relativeURL${index}`]} // Fixed string interpolation
                             />
                             <Form.Control.Feedback type="invalid">
-                                {errors[`relativeURL${index}`]} // Fixed string interpolation
+                                {errors[`relativeURL${index}`]}
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3">
@@ -71,12 +82,12 @@ const FormFile = () => {
                                 type="text"
                                 name="relativeURLName"
                                 value={group.relativeURLName || ''}
-                                placeholder="Enter relative URL name"
+                                placeholder={`Enter relative URL for ${formData.selection.toLowerCase()}`}
                                 onChange={e => handleGroupChange(index, e)}
                                 isInvalid={!!errors[`relativeURLName${index}`]} // Fixed string interpolation
                             />
                             <Form.Control.Feedback type="invalid">
-                                {errors[`relativeURLName${index}`]} // Fixed string interpolation
+                                {errors[`relativeURLName${index}`]}
                             </Form.Control.Feedback>
                         </Form.Group>
                     </div>
@@ -125,7 +136,7 @@ const FormFile = () => {
                     variant="primary"
                     type="submit"
                     className="rounded w-100"
-                    disabled={loading || Object.keys(errors).length > 0}
+                    // disabled={loading || Object.keys(errors).length > 0}
                 >
                     {loading ? 'Processing...' : 'Submit'}
                 </Button>
