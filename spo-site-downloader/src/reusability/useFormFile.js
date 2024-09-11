@@ -108,8 +108,25 @@ const useFormFile = (apiConfig) => {
             const apiUrl = `${apiConfig.apiBaseUrl}${apiConfig.endpoints.submitRequest}`; // Fixed string interpolation
             console.log(`API URL: ${apiUrl}`);
             console.log("Form Data:", formData);
-    
-            const response = await axios.post(apiUrl, formData);
+             debugger;
+            const jsonData = {
+                "siteDownloadRequest": {
+                  "siteUrl": formData.siteURL,
+                  "assetType": formData.selection,
+                  "sourceRequestId": "",
+                  "sourceSystemCallbackSproc": "",
+                  "downloadLocation": formData.downloadLocation,
+                  "comments": formData.comment,
+                  "isZipRequired": formData.zipChecked,
+                },
+                "siteDownloadAssets": formData.formGroups.map(group => ({
+                  "assetName": group.relativeURLName,
+                  "assetUrl": group.relativeURL,
+                  "comments":  formData.comment,
+                }))
+              };
+              console.log("request:", jsonData);
+            const response = await axios.post(apiUrl, jsonData);
             console.log("Response:", response);
     
             setShowToast(true);
