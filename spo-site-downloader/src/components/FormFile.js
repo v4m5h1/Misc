@@ -9,7 +9,7 @@ import apiConfig from '../config/apiConfig.json';
 const FormFile = () => {
     const {
         formData, setFormData, handleInputChange, handleGroupChange, handleSubmit,
-        handleRadioChange, errors, showToast, setShowToast, toastMessage, loading
+        handleRadioChange, errors, showToast, setShowToast, toastMessage, loading, apiStatus, isFormValid
     } = useFormFile(apiConfig);
 
     const isAssetsEnabled = ["List", "Folder", "Library"].includes(formData.selection);
@@ -136,10 +136,17 @@ const FormFile = () => {
                     variant="primary"
                     type="submit"
                     className="rounded w-100"
-                    // disabled={loading || Object.keys(errors).length > 0}
+                    disabled={loading||!isFormValid}
                 >
                     {loading ? 'Processing...' : 'Submit'}
                 </Button>
+                <div className="text-center mt-3">
+                    {apiStatus.message && (
+                        <span className={`p-2 text-white ${apiStatus.success ? 'bg-success' : 'bg-danger'}`}>
+                            {apiStatus.message}
+                        </span>
+                    )}
+                </div>
             </Form>
             <ToastMessage show={showToast} onClose={() => setShowToast(false)} message={toastMessage} />
         </Container>
