@@ -16,7 +16,7 @@ const useFormFile = (apiConfig) => {
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [loading, setLoading] = useState(false);
-
+    const [apiStatus, setApiStatus] = useState({ message: '', success: false });
     // Handle changes to the input fields
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -102,10 +102,11 @@ const useFormFile = (apiConfig) => {
             return;
         }
         setLoading(true);
+         setApiStatus({ message: '', success: false });
         console.log("Form is valid, submitting...");
     
         try {
-            const apiUrl = `${apiConfig.apiBaseUrl}${apiConfig.endpoints.submitRequest}`; // Fixed string interpolation
+            const apiUrl = `${apiConfig.apiBaseUrl}${apiConfig.endpoints.getSiteUrls}${apiConfig.endpoints.submitRequest}`; // Fixed string interpolation
             console.log(`API URL: ${apiUrl}`);
             console.log("Form Data:", formData);
              debugger;
@@ -131,10 +132,12 @@ const useFormFile = (apiConfig) => {
     
             setShowToast(true);
             setToastMessage('Submission successful!');
+            setApiStatus({ message: 'Submission successful!', success: true });
         } catch (error) {
             console.error("Submission failed:", error);
             setShowToast(true);
-            setToastMessage(`Submission failed: ${error.message}`); // Fixed string interpolation
+            setToastMessage(`Submission failed: ${error.message}`);
+            setApiStatus({ message: `Submission failed: ${error.message}`, success: false });
         } finally {
             setLoading(false);
         }
@@ -156,10 +159,13 @@ const useFormFile = (apiConfig) => {
             }));
         }
     };
+    const isFormValid = () => {
+        return validateForm() && !loading;
+    };
 
     return {
         formData, setFormData, handleInputChange, handleGroupChange, handleSubmit, handleRadioChange,
-        errors, showToast, setShowToast, toastMessage, loading
+        errors, showToast, setShowToast, toastMessage, loading,isFormValid,apiStatus
     };
 };
 
