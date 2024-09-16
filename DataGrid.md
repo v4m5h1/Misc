@@ -191,3 +191,172 @@ Sources
 [6] Componentizing our React app - Learn web development | MDN https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_components
 [7] How to integrate API in ReactJS: Step-by-Step Guide https://sailssoftware.com/how-to-integrate-api-in-reactjs-step-by-step-guide/
 [8] How to Fetch API Data in React - freeCodeCamp https://www.freecodecamp.org/news/how-to-fetch-api-data-in-react/
+
+
+
+
+Certainly! I'll provide more detailed explanations and code snippets for steps 5 to 9, showing exactly where to add the new code within the `DataGridComponent`.
+
+## Step 5: Implement Search Functionality
+
+Add the following code just below your existing state declarations at the top of your component:
+
+```jsx
+const DataGridComponent = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  // Add this new state
+  const [searchText, setSearchText] = useState('');
+
+  // ... existing useEffect and fetchData function
+
+  // Add this new function
+  const handleSearch = (event) => {
+    setSearchText(event.target.value);
+  };
+
+  // Add this filtering logic
+  const filteredData = data.filter((row) =>
+    Object.values(row).some((value) =>
+      value.toString().toLowerCase().includes(searchText.toLowerCase())
+    )
+  );
+
+  // ... existing columns definition
+
+  return (
+    <div style={{ height: 400, width: '100%' }}>
+      {/* Add this input field above the DataGrid */}
+      <input
+        type="text"
+        placeholder="Search..."
+        value={searchText}
+        onChange={handleSearch}
+        style={{ marginBottom: 10, padding: '5px', width: '200px' }}
+      />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <DataGrid
+          // Update rows prop to use filteredData
+          rows={filteredData}
+          columns={columns}
+          // ... other existing props
+        />
+      )}
+    </div>
+  );
+};
+```
+
+## Step 6: Implement Column Sorting
+
+Update your `columns` definition to include the `sortable` property:
+
+```jsx
+const columns = [
+  { field: 'id', headerName: 'ID', width: 70, sortable: true },
+  { field: 'name', headerName: 'Name', width: 130, sortable: true },
+  { field: 'email', headerName: 'Email', width: 200, sortable: true },
+  // Add more columns as needed, all with sortable: true
+];
+```
+
+## Step 7: Add Column-Specific Search
+
+First, import the `GridToolbar` at the top of your file:
+
+```jsx
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+```
+
+Then, update your DataGrid component to include the toolbar:
+
+```jsx
+<DataGrid
+  rows={filteredData}
+  columns={columns}
+  pageSize={5}
+  rowsPerPageOptions={[5, 10, 20]}
+  checkboxSelection
+  disableSelectionOnClick
+  // Add these new props
+  components={{ Toolbar: GridToolbar }}
+  componentsProps={{
+    toolbar: {
+      showQuickFilter: true,
+      quickFilterProps: { debounceMs: 500 },
+    },
+  }}
+/>
+```
+
+## Step 8: Styling
+
+Update the outermost `div` in your return statement to include more styling:
+
+```jsx
+return (
+  <div style={{ height: 400, width: '100%', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <h2 style={{ marginBottom: '20px', color: '#333' }}>Data Grid</h2>
+    {/* ... existing input and DataGrid components */}
+  </div>
+);
+```
+
+## Step 9: Error Handling
+
+Add a new state for error handling at the top of your component:
+
+```jsx
+const DataGridComponent = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState('');
+  // Add this new state
+  const [error, setError] = useState(null);
+
+  // ... rest of the component
+};
+```
+
+Update your `fetchData` function to handle errors:
+
+```jsx
+const fetchData = async () => {
+  try {
+    const response = await axios.get('YOUR_API_ENDPOINT');
+    setData(response.data);
+    setLoading(false);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    setError('An error occurred while fetching data. Please try again later.');
+    setLoading(false);
+  }
+};
+```
+
+Finally, add error display in your return statement:
+
+```jsx
+return (
+  <div style={{ height: 400, width: '100%', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <h2 style={{ marginBottom: '20px', color: '#333' }}>Data Grid</h2>
+    {/* Add this error display */}
+    {error && <p style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
+    {/* ... existing input field */}
+    {loading ? (
+      <p>Loading...</p>
+    ) : (
+      <DataGrid
+        // ... existing DataGrid props
+      />
+    )}
+  </div>
+);
+```
+
+These detailed additions will enhance your `DataGridComponent` with improved search functionality, column sorting, column-specific filtering, better styling, and robust error handling. The component now offers a more complete and user-friendly data grid experience, suitable for a production-level React application.
+
+Sources
+
