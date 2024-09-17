@@ -1,9 +1,9 @@
 import React from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
-import useFormFile from '../reusability/useFormFile';
-import RadioButtonGroup from '../reusability/RadioButtonGroup';
-import ToastMessage from '../reusability/ToastMessage';
-import ToggleSwitch from '../reusability/ToggleSwitch';
+import useFormFile from './Hooks/useFormFile';
+import RadioButtonGroup from '../Components/RadioButtonGroup';
+import ToastMessage from '../Components/ToastMessage';
+import ToggleSwitch from '../Components/ToggleSwitch';
 import apiConfig from '../config/apiConfig.json';
 
 const FormFile = () => {
@@ -63,14 +63,14 @@ const FormFile = () => {
                 {isAssetsEnabled && formData.formGroups.map((group, index) => (
                     <div key={index} className="mb-3">
                         <Form.Group className="mb-3">
-                        <Form.Label>{getAssetLabel()}</Form.Label>
+                            <Form.Label>{getAssetLabel()}</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="relativeURL"
                                 value={group.relativeURL || ''}
                                 placeholder={`Enter relative URL for ${formData.selection.toLowerCase()}`}
                                 onChange={e => handleGroupChange(index, e)}
-                                isInvalid={!!errors[`relativeURL${index}`]} // Fixed string interpolation
+                                isInvalid={!!errors[`relativeURL${index}`]}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors[`relativeURL${index}`]}
@@ -84,7 +84,7 @@ const FormFile = () => {
                                 value={group.relativeURLName || ''}
                                 placeholder={`Enter relative URL for ${formData.selection.toLowerCase()}`}
                                 onChange={e => handleGroupChange(index, e)}
-                                isInvalid={!!errors[`relativeURLName${index}`]} // Fixed string interpolation
+                                isInvalid={!!errors[`relativeURLName${index}`]}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors[`relativeURLName${index}`]}
@@ -136,7 +136,7 @@ const FormFile = () => {
                     variant="primary"
                     type="submit"
                     className="rounded w-100"
-                    disabled={loading||!isFormValid}
+                    disabled={loading || !isFormValid}
                 >
                     {loading ? 'Processing...' : 'Submit'}
                 </Button>
