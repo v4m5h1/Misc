@@ -360,3 +360,72 @@ These detailed additions will enhance your `DataGridComponent` with improved sea
 
 Sources
 
+
+
+
+// api.js
+const apiUrl = 'https://your-api-url.com';
+
+const postAsyncMethod = async (endpoint, data) => {
+  try {
+    const response = await fetch(`${apiUrl}/${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const jsonData = await response.json();
+    return jsonData;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+};
+
+export default postAsyncMethod;
+
+
+// YourComponent.js
+import React, { useState } from 'react';
+import postAsyncMethod from './api';
+
+const YourComponent = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = { name, email };
+
+    try {
+      const response = await postAsyncMethod('users', data);
+      console.log('Response:', response);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Name:
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      </label>
+      <br />
+      <label>
+        Email:
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      <br />
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+export default YourComponent;
