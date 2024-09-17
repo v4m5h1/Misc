@@ -3,10 +3,10 @@ import { Container, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate('/form'); // Use navigate instead of history.push
+    navigate('/form'); // Use navigate instead of history.pu
   };
 
 
@@ -15,9 +15,9 @@ const HomePage = () => {
       <Row className="w-100">
         <Col className="text-center">
           <h1>Welcome to the Home Page</h1>
-          <Button 
-            variant="primary" 
-            size="lg" 
+          <Button
+            variant="primary"
+            size="lg"
             onClick={handleButtonClick}
           >
             Go to Form Page
