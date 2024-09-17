@@ -65,3 +65,27 @@ const useCrudOperations = () => {
 };
 
 export default useCrudOperations;
+
+
+
+// Generic GET method
+  const get = async (endpoint, options = {}) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${baseUrl}${endpoint}`, {
+        method: 'GET',
+        credentials: 'include', // include credentials
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        ...options,
+      });
+      const data = await response.json();
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      setError(error);
+      setIsLoading(false);
+      throw error;
+    }
+  };
