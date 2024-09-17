@@ -1,6 +1,3 @@
-Here's an example of a modern responsive React grid component using Bootstrap, with sorting, searching, and exporting to Excel:
-GridComponent.jsx
-Jsx
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Table, Form, Button } from 'react-bootstrap';
 import { useCrudOperations } from './crudOperations'; // import CRUD operations
@@ -124,19 +121,3 @@ const GridComponent = () => {
 };
 
 export default GridComponent;
-crudOperations.jsx (same as before)
-Jsx
-// ...
-API Response
-JSON
-{
-  "data": [
-    {
-      "id": 1,
-      "name": "John Doe",
-      "email": "johndoe@example.com",
-      "age": 30
-    },
-    {
-      "id": 2,
-      "
