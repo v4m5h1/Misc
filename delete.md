@@ -1,91 +1,22 @@
-// crudOperations.jsx
+// ExampleComponent.jsx
 
-import { useState, useEffect } from 'react';
+import React from 'react';
+import useCrudOperations from './crudOperations';
 
-const baseUrl = 'https://your-api-url.com/api'; // replace with your base API URL
+const ExampleComponent = () => {
+  const { get, post, deleteResource } = useCrudOperations();
 
-const useCrudOperations = () => {
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Generic GET method
-  const get = async (endpoint) => {
-    setIsLoading(true);
+  const fetchData = async () => {
     try {
-      const response = await fetch(`${baseUrl}${endpoint}`);
-      const data = await response.json();
-      setIsLoading(false);
-      return data;
-    } catch (error) {
-      setError(error);
-      setIsLoading(false);
-      throw error;
-    }
-  };
-
-  // Generic POST method
-  const post = async (endpoint, data) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${baseUrl}${endpoint}`, {
-        method: 'POST',
+      const data = await get('/users', {
         headers: {
-          'Content-Type': 'application/json',
+          Authorization: 'Bearer your-token',
         },
-        body: JSON.stringify(data),
       });
-      const result = await response.json();
-      setIsLoading(false);
-      return result;
+      console.log(data);
     } catch (error) {
-      setError(error);
-      setIsLoading(false);
-      throw error;
+      console.error(error);
     }
   };
 
-  // Generic DELETE method
-  const deleteResource = async (endpoint) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${baseUrl}${endpoint}`, {
-        method: 'DELETE',
-      });
-      const result = await response.json();
-      setIsLoading(false);
-      return result;
-    } catch (error) {
-      setError(error);
-      setIsLoading(false);
-      throw error;
-    }
-  };
-
-  return { get, post, deleteResource, error, isLoading };
-};
-
-export default useCrudOperations;
-
-
-
-// Generic GET method
-  const get = async (endpoint, options = {}) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${baseUrl}${endpoint}`, {
-        method: 'GET',
-        credentials: 'include', // include credentials
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        ...options,
-      });
-      const data = await response.json();
-      setIsLoading(false);
-      return data;
-    } catch (error) {
-      setError(error);
-      setIsLoading(false);
-      throw error;
-    }
-  };
+  // ...
