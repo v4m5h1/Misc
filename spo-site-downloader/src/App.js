@@ -19,7 +19,6 @@ const App = () => {
         <Route path="/form" element={<FormFile />} />
         <Route path="/newdowload" element={<NewDown />} />
         <Route path="/allrequest" element={<Allrequests />} />
-        {/* Add other routes here */}
       </Routes>
       <Footer />
     </Router>
