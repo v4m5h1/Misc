@@ -1,3 +1,66 @@
+To resolve the error and correctly handle pagination with Microsoft Graph .NET SDK v5, you should use the `PageIterator` class. Here's how you can adjust your code:
+
+```csharp
+using Microsoft.Graph;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+static async Task<bool> CheckIsUserM365Member(GraphServiceClient graphClient, string groupId, User userObj)
+{
+    try
+    {
+        // Fetch the first page of users in the group
+        var usersPage = await graphClient.Groups[groupId].Members.GraphUser.GetAsync();
+
+        // Use PageIterator to handle pagination
+        var pageIterator = PageIterator<User>
+            .CreatePageIterator(
+                graphClient,
+                usersPage,
+                user =>
+                {
+                    if (userObj.Id == user.Id)
+                    {
+                        return false; // Stop iterating if user is found
+                    }
+                    return true; // Continue iterating
+                });
+
+        await pageIterator.IterateAsync();
+
+        // Check if the user was found during iteration
+        return !pageIterator.State.HasMorePages;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+        return false;
+    }
+}
+```
+
+### Key Points:
+
+1. **Use `PageIterator`**: This simplifies handling paginated responses by automatically iterating over pages.
+
+2. **Stop Iteration**: The iterator stops when the specified condition is met (i.e., when the user is found).
+
+3. **Error Handling**: Ensure exceptions are caught and logged.
+
+This approach leverages the `PageIterator` class to manage pagination efficiently, avoiding manual handling of `NextPageRequest`.
+
+Sources
+[1] image.jpg https://pplx-res.cloudinary.com/image/upload/v1727914529/user_uploads/vigvcspfv/image.jpg
+[2] image.jpg https://pplx-res.cloudinary.com/image/upload/v1727914102/user_uploads/ccvypgtch/image.jpg
+[3] image.jpg https://pplx-res.cloudinary.com/image/upload/v1727913541/user_uploads/qxjpdcwgj/image.jpg
+[4] pagination in MS.Graph 'groups' in SDK v5 - Microsoft Q&A https://learn.microsoft.com/en-us/answers/questions/1189597/pagination-in-ms-graph-groups-in-sdk-v5
+[5] Practical Graph: All About Pagination and Fetching Data https://practical365.com/pagination-graph-sdk/
+[6] Page through a collection using the Microsoft Graph SDKs https://learn.microsoft.com/id-id/graph/sdks/paging
+
+
+
+
 To create a method that adds a user to an Office 365 group using the Microsoft Graph SDK, you’ll need to utilize the GraphServiceClient along with the user’s email and the group’s email. Below is an example implementation of such a method in C#.
 
 Method Implementation
