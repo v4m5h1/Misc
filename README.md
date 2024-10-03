@@ -1,3 +1,67 @@
+Here's an improved version of the code with performance and style enhancements:
+
+1. **Reduce Repeated Service Calls**: Combine similar checks to minimize redundant operations.
+2. **Use Early Returns**: Simplify logic flow and reduce nesting.
+3. **Improve Log Messages**: Make them more informative.
+4. **Meaningful Variable Names**: Enhance readability.
+
+```csharp
+static async Task RemoveUserFromM365Group(GraphServiceClient graphClient, string userMail, string groupMail, bool removeAsOwner, Config config)
+{
+    try
+    {
+        var userObj = await FetchUser(graphClient, userMail);
+        var group = await FetchGroup(graphClient, groupMail);
+
+        if (userObj == null || group == null)
+        {
+            Utility.Log($"User or group not found: {userMail}, {groupMail}");
+            return;
+        }
+
+        bool isOwner = await IsUserExistInM365Group(graphClient, group.Id, userObj, true);
+        bool isMember = await IsUserExistInM365Group(graphClient, group.Id, userObj, false);
+
+        if (removeAsOwner && isOwner)
+        {
+            await graphClient.Groups[group.Id].Owners[userObj.Id].Ref.DeleteAsync();
+            Utility.Log($"Removed {userMail} as owner from group: {groupMail}");
+            return;
+        }
+
+        if (isMember)
+        {
+            await graphClient.Groups[group.Id].Members[userObj.Id].Ref.DeleteAsync();
+            Utility.Log($"Removed {userMail} as member from group: {groupMail}");
+            return;
+        }
+
+        Utility.Log($"{userMail} does not belong to group: {groupMail}");
+    }
+    catch (Exception ex)
+    {
+        Utility.Log($"Exception encountered: {ex.Message}");
+        if (ex.InnerException != null)
+            Utility.Log($"Inner Exception: {ex.InnerException.Message}");
+    }
+}
+```
+
+### Key Improvements:
+
+- **Early Returns**: Immediately returns after a successful operation to avoid unnecessary checks.
+- **Consolidated Checks**: Checks for ownership and membership are combined logically to prevent repeated service calls.
+- **Enhanced Logging**: Provides clear and concise log messages for each operation.
+- **Null Check Simplification**: Combines user and group null checks for efficiency.
+
+These changes should make the code more efficient and easier to read.
+
+Sources
+[1] image.jpg https://pplx-res.cloudinary.com/image/upload/v1727971895/user_uploads/bqgsbbfmp/image.jpg
+
+
+
+
 To publish a React application to a QA environment, you typically need to create a build optimized for production and deploy it to the appropriate QA server. Here’s a step-by-step guide on how to set up and publish your React app to a QA environment.
 
 ### 1. **Prepare for QA Environment**
