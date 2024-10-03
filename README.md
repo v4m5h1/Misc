@@ -1,3 +1,74 @@
+To handle pagination in Microsoft Graph .NET SDK v5, you should use the `@odata.nextLink` property manually, as the `PageIterator` class does not have a `HasMorePages` property. Here's how you can adjust your code:
+
+```csharp
+using Microsoft.Graph;
+using System;
+using System.Threading.Tasks;
+
+static async Task<bool> CheckIsUserM365Member(GraphServiceClient graphClient, string groupId, User userObj)
+{
+    try
+    {
+        // Fetch the first page of users in the group
+        var usersPage = await graphClient.Groups[groupId].Members.GraphUser.GetAsync();
+
+        while (usersPage != null)
+        {
+            foreach (var user in usersPage.Value)
+            {
+                if (user is User && userObj.Id == user.Id)
+                {
+                    return true;
+                }
+            }
+
+            // Check if there's a next page
+            if (usersPage.OdataNextLink != null)
+            {
+                // Fetch the next page using OdataNextLink
+                usersPage = await graphClient.Groups[groupId]
+                    .Members.GraphUser.GetAsync(requestConfiguration =>
+                    {
+                        requestConfiguration.QueryParameters.Add("$skiptoken", usersPage.OdataNextLink);
+                    });
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+        return false;
+    }
+
+    return false;
+}
+```
+
+### Key Adjustments:
+
+1. **Manual Pagination**: Use the `@odata.nextLink` property to manually fetch the next page.
+
+2. **Check for Next Page**: Verify if `OdataNextLink` is not null to determine if more pages exist.
+
+3. **Error Handling**: Ensure exceptions are caught and logged.
+
+This approach uses the `@odata.nextLink` property to manage pagination and fetch additional pages as needed.
+
+Sources
+[1] image.jpg https://pplx-res.cloudinary.com/image/upload/v1727914102/user_uploads/ccvypgtch/image.jpg
+[2] image.jpg https://pplx-res.cloudinary.com/image/upload/v1727913541/user_uploads/qxjpdcwgj/image.jpg
+[3] image.jpg https://pplx-res.cloudinary.com/image/upload/v1727914529/user_uploads/vigvcspfv/image.jpg
+[4] Page through a collection using the Microsoft Graph SDKs https://learn.microsoft.com/id-id/graph/sdks/paging
+[5] pagination in ms.Graph 'groups' in SDK v5 - Stack Overflow https://stackoverflow.com/questions/75690753/pagination-in-ms-graph-groups-in-sdk-v5
+[6] Paging Microsoft Graph data in your app https://learn.microsoft.com/zh-tw/graph/paging
+
+
+
+
 To resolve the error and correctly handle pagination with Microsoft Graph .NET SDK v5, you should use the `PageIterator` class. Here's how you can adjust your code:
 
 ```csharp
