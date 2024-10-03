@@ -1,3 +1,67 @@
+The error you're encountering indicates that the `Request()` method is not recognized. In Microsoft Graph SDK 5.x, the syntax for creating requests has changed. Here's how you can modify your code to work with the latest version:
+
+### Updated Code for Microsoft Graph SDK 5.x
+
+```csharp
+using Microsoft.Graph;
+using System;
+using System.Threading.Tasks;
+
+public class GraphHelper
+{
+    private readonly GraphServiceClient _graphClient;
+
+    public GraphHelper(GraphServiceClient graphClient)
+    {
+        _graphClient = graphClient;
+    }
+
+    public async Task<Group> FetchGroupAsync(string groupMail)
+    {
+        try
+        {
+            // Use the GetAsync method directly on the Groups collection
+            var groups = await _graphClient.Groups
+                .GetAsync(requestConfiguration =>
+                {
+                    requestConfiguration.QueryParameters.Filter = $"mail eq '{groupMail}'";
+                    requestConfiguration.QueryParameters.Select = new[] { "id", "displayName", "mail" };
+                });
+
+            // Return the first group found or null if no group is found
+            return groups?.Value?.Count > 0 ? groups.Value[0] : null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching group: {ex.Message}");
+            return null;
+        }
+    }
+}
+```
+
+### Key Changes
+
+- **Direct Use of GetAsync**: Instead of using `Request()`, you now use `GetAsync()` directly on the `Groups` collection.
+- **Request Configuration**: The `requestConfiguration` parameter allows you to set query parameters like `Filter` and `Select`.
+
+### Considerations
+
+- **Permissions**: Ensure your app has the necessary permissions (`Group.Read.All`) in Azure AD.
+- **Error Handling**: The code includes basic error handling to manage potential issues.
+
+This should resolve the issue and allow you to fetch an Office 365 group based on its email using the latest version of the Microsoft Graph SDK.
+
+Sources
+[1] image.jpg https://pplx-res.cloudinary.com/image/upload/v1727917901/user_uploads/updbbaaik/image.jpg
+[2] Get the Group Id using Group mail or Group Name - Microsoft Q&A https://learn.microsoft.com/en-us/answers/questions/995772/get-the-group-id-using-group-mail-or-group-name
+[3] List group members - Microsoft Graph v1.0 https://learn.microsoft.com/en-us/graph/api/group-list-members?tabs=http&view=graph-rest-1.0
+[4] Get group - Microsoft Graph v1.0 https://learn.microsoft.com/en-us/graph/api/group-get?view=graph-rest-1.0
+
+
+
+
+
 To handle pagination in Microsoft Graph .NET SDK v5, you should use the `@odata.nextLink` property manually, as the `PageIterator` class does not have a `HasMorePages` property. Here's how you can adjust your code:
 
 ```csharp
