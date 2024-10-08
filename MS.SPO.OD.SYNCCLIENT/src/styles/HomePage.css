@@ -1,0 +1,78 @@
+.radio-field {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    display: grid;
+    place-content: center;
+    margin: 0 auto;
+}
+
+.radio-field .icon {
+    border-radius: 50%;
+    background-color: rgb(250, 250, 250);
+    width: 137px;
+    /* height: 137px; */
+    line-height: 115px;
+    margin-bottom: 0px;
+    margin: 0 auto;
+}
+
+.radio-field .icon,
+.radio-field .service-text {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.topnav-wrapper {
+    background-color: #dadada;
+    border-bottom: 1px #e5e5e5 solid;
+    margin-bottom: 40px;
+    height: 48px;
+}
+
+.topnav-wrapper > .navbar-brand {
+    padding-left: 40px;
+}
+
+.app-title {
+    height: auto;
+    width: 100%; 
+    position: relative;
+    margin-top: 15PX;
+    background-color: GRAY;
+    color: #fff;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.circle {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    position: relative;
+    background-color: #f1f1f1;
+    padding-top: 50px;
+}
+
+.circle:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+    border: black solid 2px;
+}
+
+.circle-text {
+    bottom: -30px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 0;
+}
+
+.custom-icon {
+    font-size: 100px;
+}

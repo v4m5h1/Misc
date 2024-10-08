@@ -1,0 +1,20 @@
+[
+    {
+        "label":"All",
+        "value": "All",
+        "addtlInfo": false
+    },
+    {
+        "label":"Library",
+        "value": "Library",
+        "addtlInfo": true
+    },{
+        "label":"List",
+        "value": "List",
+        "addtlInfo": true
+    },{
+        "label":"Folder",
+        "value": "Folder",
+        "addtlInfo": true
+    }
+]

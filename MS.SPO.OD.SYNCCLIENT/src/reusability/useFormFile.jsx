@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
+import crudOperations from './crudOperations';
+import assetOptions from '../config/assetsOptionsConfig.json';
 
 const useFormFile = (apiConfig) => {
     const initialFormData = {
@@ -10,6 +11,8 @@ const useFormFile = (apiConfig) => {
         formGroups: [{ relativeURL: "", relativeURLName: "" }],
         zipChecked: false,
     };
+
+    const {get, post, error, isLoading} = crudOperations();
 
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState({});
@@ -57,11 +60,12 @@ const useFormFile = (apiConfig) => {
         });
     };
     
+const isAssetsEnabled = assetOptions.filter(asset => asset.addtlInfo).map(asset => asset.value).includes(formData.selection);
 
     // Validate form fields
     const validateForm = () => {
         let newErrors = {};
-        const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+        const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
         if (!formData.siteURL.trim()) {
             newErrors.siteURL = "Site URL is required.";
@@ -71,7 +75,7 @@ const useFormFile = (apiConfig) => {
 
         if (!formData.selection.trim()) {
             newErrors.selection = "Asset selection is required.";
-        } else if (["List", "Folder", "Library"].includes(formData.selection)) {
+        } else if (isAssetsEnabled) {
             formData.formGroups.forEach((group, index) => {
                 if (!group.relativeURL.trim()) {
                     newErrors[`relativeURL${index}`] = "Relative URL is required.";
@@ -106,7 +110,7 @@ const useFormFile = (apiConfig) => {
         console.log("Form is valid, submitting...");
     
         try {
-            const apiUrl = `${apiConfig.apiBaseUrl}${apiConfig.endpoints.getSiteUrls}${apiConfig.endpoints.submitRequest}`; // Fixed string interpolation
+            const apiUrl = `${apiConfig.endpoints.submitRequest}`; // Fixed string interpolation
             console.log(`API URL: ${apiUrl}`);
             console.log("Form Data:", formData);
              debugger;
@@ -127,12 +131,12 @@ const useFormFile = (apiConfig) => {
                 }))
               };
               console.log("request:", jsonData);
-            const response = await axios.post(apiUrl, jsonData);
+            const response = await post(apiUrl, jsonData);
             console.log("Response:", response);
     
             setShowToast(true);
             setToastMessage('Submission successful!');
-            setApiStatus({ message: 'Submission successful!', success: true });
+            setApiStatus({ message: JSON.stringify(response), success: response.validationResponse.isSuccess });
         } catch (error) {
             console.error("Submission failed:", error);
             setShowToast(true);
@@ -147,10 +151,11 @@ const useFormFile = (apiConfig) => {
     // Handle radio button changes
     const handleRadioChange = (e) => {
         const { name, value } = e.target;
+        const isAddtlInfoEnabled = assetOptions.filter(asset => asset.addtlInfo).map(asset => asset.value).includes(e.target.value);
         setFormData(prevData => ({
             ...prevData,
             [name]: value,
-            formGroups: (value === "List" || value === "Folder" || value === "Library") ? prevData.formGroups : [{ relativeURL: "", relativeURLName: "" }]
+            formGroups: isAssetsEnabled ? prevData.formGroups : [{ relativeURL: "", relativeURLName: "" }]
         }));
         if (errors[name]) {
             setErrors(prevErrors => ({

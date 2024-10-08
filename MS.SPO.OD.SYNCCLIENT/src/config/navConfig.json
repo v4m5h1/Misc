@@ -1,0 +1,14 @@
+{
+    "navLinks":[
+        {
+            "name":"New Download Request",
+            "path":"/form",
+            "exact":false
+        },
+        {
+            "name":"Home",
+            "path":"/",
+            "exact":true
+        }
+    ]
+}
