@@ -11,18 +11,16 @@ import Allrequests from "./components/Allrequests";
 
 const App = () => {
   return (
-    
-    <Router>
+    <BrowserRourter>    
     <NavBar config={config} />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/form" element={<FormFile />} />
-        <Route path="/newdowload" element={<NewDown />} />
+        <Route path="/form" element={<FormFile />} />        
         <Route path="/allrequest" element={<Allrequests />} />
         {/* Add other routes here */}
       </Routes>
-      <Footer/>
-    </Router>
+      <Footer/>    
+  </BrowserRourter>
   );
 };
 
