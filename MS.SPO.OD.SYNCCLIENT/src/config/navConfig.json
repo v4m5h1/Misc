@@ -1,14 +1,25 @@
 {
     "navLinks":[
         {
-            "name":"New Download Request",
-            "path":"/form",
-            "exact":false
-        },
-        {
             "name":"Home",
             "path":"/",
             "exact":true
+        },
+        {
+            "name":" Download Request",
+            "path":"/downloadrequest",
+            "exact":false
+        },
+         {
+            "name":" Upload Request",
+            "path":"/uploadrequest",
+            "exact":false
+        },
+         {
+            "name":" View All Requests",
+            "path":"/allrequest",
+            "exact":false
         }
+
     ]
 }
