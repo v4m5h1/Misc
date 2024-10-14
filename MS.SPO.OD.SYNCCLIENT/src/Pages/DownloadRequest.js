@@ -1,11 +1,11 @@
 import React from 'react';
 import useFormFile from '../hooks/downloadFormValidation';
-import { CustomRadioGroup } from '../CustomComponents/CustomRadio'; // Import your CustomRadioGroup component
+import { CustomRadioGroup } from '../CustomComponents/CustomRadio';
 import ToastMessage from '../CustomComponents/ToastMessage';
 import apiConfig from '../config/apiConfig';
 import assetOptions from '../config/assetsOptionsConfig.json';
-import CustomInput from '../CustomComponents/CustomInput'; // Import your CustomInput component
-import ToggleSwitch from '../CustomComponents/CustomToggle'; // Import your ToggleSwitch component
+import CustomInput from '../CustomComponents/CustomInput';
+import ToggleSwitch from '../CustomComponents/CustomToggle';
 import CustomButton from '../CustomComponents/CustomButton';
 
 const FormFile = () => {
@@ -29,12 +29,10 @@ const FormFile = () => {
     .filter((asset) => asset.addtlInfo)
     .map((asset) => asset.value)
     .includes(formData.selection);
-  console.log(apiStatus)
-
 
   return (
-    <div className={` ${apiStatus.success ? 'w-full flex ' : 'block'} ml-10 `}>
-      <div className={`${apiStatus.success ? 'w-2/3 ml-5 float-left ' : ' my-2'} mx-6  rounded-xl`}>
+    <div className={`${apiStatus.success ? 'w-full flex' : 'block'} ml-10`}>
+      <div className={`${apiStatus.success ? 'w-2/3 ml-5 float-left' : 'my-2'} mx-6 rounded-xl`}>
         <div className="p-8 mt-10 mb-10 bg-white rounded-lg shadow-lg">
           <h4 className="text-3xl font-semibold text-center">Download Request</h4>
 
@@ -44,6 +42,7 @@ const FormFile = () => {
               value={formData.siteURL || ''}
               onChange={handleInputChange}
               name="siteURL"
+              id="siteURL"
               error={errors.siteURL}
               placeholder="Enter Site URL"
             />
@@ -65,6 +64,7 @@ const FormFile = () => {
                       value={group.relativeURL || ''}
                       onChange={(e) => handleGroupChange(index, e)}
                       name={`relativeURLs[${index}]`}
+                      id={`relativeURLs-${index}`} // Ensure unique ids
                       error={errors[`relativeURLs[${index}]`]}
                       placeholder={`Enter ${formData.selection.toLowerCase()} name`}
                     />
@@ -73,6 +73,7 @@ const FormFile = () => {
                       value={group.relativeURLName || ''}
                       onChange={(e) => handleGroupChange(index, e)}
                       name={`relativeURLName${index}`}
+                      id={`relativeURLName-${index}`} // Ensure unique ids
                       error={errors[`relativeURLName${index}`]}
                       placeholder={`Enter relative URL for ${formData.selection.toLowerCase()}`}
                     />
@@ -85,6 +86,7 @@ const FormFile = () => {
               value={formData.downloadLocation || ''}
               onChange={handleInputChange}
               name="downloadLocation"
+              id="downloadLocation" // Set a unique id for the input
               error={errors.downloadLocation}
               placeholder="Enter location"
             />
@@ -104,15 +106,15 @@ const FormFile = () => {
               value={formData.comment || ''}
               onChange={handleInputChange}
               name="comment"
+              id="comment" // Set a unique id for the input
               error={errors.comment}
               placeholder="Enter your comment"
             />
 
-
             <CustomButton
               disabled={loading || !isFormValid}
               type="submit"
-              size='md'
+              size="md"
               label="SUBMIT"
               variant={`${loading ? 'secondary' : 'primary'}`}
               block={false}
@@ -140,12 +142,9 @@ const FormFile = () => {
         </div>
       </div>
 
-      <div className={`${apiStatus.success ? 'w-1/3 mt-10 float-right ' : 'hidden'}`}>
-        <pre className='flex flex-col'>
+      <div className={`${apiStatus.success ? 'w-1/3 mt-10 float-right' : 'hidden'}`}>
+        <pre className="flex flex-col">
           <b>Information Submitted</b>
-
-
-
           <br />
           {apiStatus.success &&
             apiStatus.message &&

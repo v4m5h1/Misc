@@ -33,6 +33,7 @@ const CustomButton = ({
             type={type}
             onClick={onClick}
             disabled={disabled}
+            aria-label={label}
             className={`rounded-md w-full font-bold flex items-center justify-center text-white transition duration-300 ease-in-out
                 ${disabled ? 'bg-gray-400 cursor-not-allowed' : variantStyles[variant]}
                 ${sizeStyles[size]} ${block ? 'w-full' : ''}

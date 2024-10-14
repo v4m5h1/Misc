@@ -8,16 +8,20 @@ import FormFile from "./Pages/DownloadRequest";
 import Allrequests from "./Pages/Allrequests";
 import RequestForm from "./Pages/UploadRequest";
 
+export const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<HomePage />} />
+    <Route path="/downloadrequest" element={<FormFile />} />
+    <Route path="/uploadrequest" element={<RequestForm />} />
+    <Route path="/allrequest" element={<Allrequests />} />
+  </Routes>
+);
+
 const App = () => {
   return (
     <Router>
       <NavBar config={config} />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/downloadrequest" element={<FormFile />} />
-        <Route path="/uploadrequest" element={<RequestForm />} />
-        <Route path="/allrequest" element={<Allrequests />} />
-      </Routes>
+      <AppRoutes />
       <Footer />
     </Router>
   );

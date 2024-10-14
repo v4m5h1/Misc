@@ -7,13 +7,13 @@ import * as XLSX from 'xlsx';
 import { ClipLoader } from 'react-spinners';
 import '../App.css'
 
-DataTable.use(DT);
 
 const Allrequests = () => {
   const [tableData, setTableData] = useState([]);
   const [columnKeys, setColumnKeys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [secTableData, setSectableData] = useState([]);
+  DataTable.use(DT);
 
   const getData = async () => {
     setLoading(true);
@@ -70,7 +70,7 @@ const Allrequests = () => {
 
       {loading ? (
         <div className="flex items-center justify-center w-full">
-          <ClipLoader loading={true} size={50} color="#123abc" />
+          <ClipLoader data-testid="loading-spinner" loading={true} size={50} color="#123abc" />
         </div>
       ) : (
         <DataTable
