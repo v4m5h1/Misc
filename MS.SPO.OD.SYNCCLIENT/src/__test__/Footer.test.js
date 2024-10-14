@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Footer from '../Pages/Footer';
+import "@testing-library/jest-dom";
 
 describe('Footer', () => {
     test('renders without crashing', () => {

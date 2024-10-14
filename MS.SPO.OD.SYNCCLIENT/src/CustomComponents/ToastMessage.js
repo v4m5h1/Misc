@@ -12,6 +12,7 @@ const ToastMessage = ({ show, onClose, message }) => {
 
   return (
     <div
+      role="alert"
       className="fixed z-50 p-4 bg-white border border-gray-300 rounded-lg shadow-md top-5 right-5"
       style={{ transition: 'opacity 0.3s ease', opacity: show ? 1 : 0 }}
     >

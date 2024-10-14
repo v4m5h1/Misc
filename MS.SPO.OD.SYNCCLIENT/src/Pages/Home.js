@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/HomePage.css';
 import { FiDownload, FiUpload } from 'react-icons/fi'
 import { RiGalleryView } from "react-icons/ri";
 
