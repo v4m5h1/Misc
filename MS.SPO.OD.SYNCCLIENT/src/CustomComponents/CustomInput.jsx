@@ -8,6 +8,7 @@ const CustomInput = ({
     placeholder,
     type = 'text',
     name,
+    className = ''
 }) => {
     return (
         <div className="flex flex-col w-full my-1.5">
