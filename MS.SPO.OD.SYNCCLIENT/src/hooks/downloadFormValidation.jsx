@@ -21,18 +21,25 @@ const useFormFile = (apiConfig) => {
     const [loading, setLoading] = useState(false);
     const [apiStatus, setApiStatus] = useState({ message: '', success: false });
     // Handle changes to the input fields
+    // const handleInputChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData(prevData => ({
+    //         ...prevData,
+    //         [name]: value
+    //     }));
+    //     if (errors[name]) {
+    //         setErrors(prevErrors => ({
+    //             ...prevErrors,
+    //             [name]: null
+    //         }));
+    //     }
+    // };
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevData => ({
+        setFormData((prevData) => ({
             ...prevData,
-            [name]: value
+            [name]: value,
         }));
-        if (errors[name]) {
-            setErrors(prevErrors => ({
-                ...prevErrors,
-                [name]: null
-            }));
-        }
     };
 
     // Handle changes to group fields

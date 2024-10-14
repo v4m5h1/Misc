@@ -58,7 +58,6 @@ const UploadRequest = () => {
 
         // Validate form data
         if (!validateForm()) {
-            setShowToast(true); // Show toast for errors
             setToastMessage('Please correct the errors in the form.');
             return; // Stop submission if there are errors
         }
@@ -69,8 +68,8 @@ const UploadRequest = () => {
         // Simulate form submission
         setTimeout(() => {
             setSubmissionStatus('Submitted Successfully');
-            setShowToast(true); // Show success toast
             setToastMessage('Form submitted successfully!');
+            setShowToast(true);
             // Clear form after submission (optional)
             setFormData({
                 siteURL: '',
