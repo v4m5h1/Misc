@@ -1,41 +1,18 @@
 
-CREATE VIEW MatchingRecords AS
-SELECT * FROM migrationmaster
-WHERE 
-  SUBSTRING(sourceemail, 1, CHARINDEX('@', sourceemail) - 1) = 
-    SUBSTRING(
-      SUBSTRING(sourcesiteurl, CHARINDEX('personal/', sourcesiteurl) + 9, LEN(sourcesiteurl)),
-      1,
-      CHARINDEX('_', SUBSTRING(sourcesiteurl, CHARINDEX('personal/', sourcesiteurl) + 9, LEN(sourcesiteurl))) - 1
-    )
-  AND 
-  REPLACE(SUBSTRING(targetemail, 1, CHARINDEX('@', targetemail) - 1), '.', '_') = 
-    SUBSTRING(
-      SUBSTRING(targetsiteurl, CHARINDEX('personal/', targetsiteurl) + 9, LEN(targetsiteurl)),
-      1,
-      CHARINDEX('_morganstanley', SUBSTRING(targetsiteurl, CHARINDEX('personal/', targetsiteurl) + 9, LEN(targetsiteurl))) - 1
-    );
-
-
-
-
-
-
-CREATE VIEW NonMatchingRecords AS
-SELECT * FROM migrationmaster
-WHERE 
-  NOT (
-    SUBSTRING(sourceemail, 1, CHARINDEX('@', sourceemail) - 1) = 
-      SUBSTRING(
-        SUBSTRING(sourcesiteurl, CHARINDEX('personal/', sourcesiteurl) + 9, LEN(sourcesiteurl)),
-        1,
-        CHARINDEX('_', SUBSTRING(sourcesiteurl, CHARINDEX('personal/', sourcesiteurl) + 9, LEN(sourcesiteurl))) - 1
-      )
-    AND 
-    REPLACE(SUBSTRING(targetemail, 1, CHARINDEX('@', targetemail) - 1), '.', '_') = 
-      SUBSTRING(
-        SUBSTRING(targetsiteurl, CHARINDEX('personal/', targetsiteurl) + 9, LEN(targetsiteurl)),
-        1,
-        CHARINDEX('_morganstanley', SUBSTRING(targetsiteurl, CHARINDEX('personal/', targetsiteurl) + 9, LEN(targetsiteurl))) - 1
-      )
-  );
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <system.webServer>
+    <rewrite>
+      <rules>
+        <rule name="React Router" stopProcessing="true">
+          <match url=".*" />
+          <conditions logicalGrouping="MatchAll">
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="/" />
+        </rule>
+      </rules>
+    </rewrite>
+  </system.webServer>
+</configuration>
