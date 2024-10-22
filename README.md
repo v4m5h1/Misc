@@ -1,73 +1,27 @@
-public async Task<(long totalSize, int fileCount)> GetTotalFileSizeAndCount(GraphServiceClient graphClient, string userEmail)
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using CsvHelper;
+using CsvHelper.Configuration;
+
+public class CsvModel
 {
-    var user = await graphClient.Users[userEmail].Request().GetAsync();
-    if (user == null) return (0, 0);
-
-    var drive = await graphClient.Users[user.Id].Drive.Request().GetAsync();
-    if (drive == null) return (0, 0);
-
-    long totalSize = 0;
-    int fileCount = 0;
-    string nextLink = "root/children";
-
-    while (!string.IsNullOrEmpty(nextLink))
-    {
-        var items = await graphClient.Drives[drive.Id].Items[nextLink].Request().GetAsync();
-        
-        foreach (var item in items)
-        {
-            if (item.File != null)
-            {
-                totalSize += item.Size ?? 0;
-                fileCount++;
-            }
-            else if (item.Folder != null)
-            {
-                // Recursively process the folder
-                var folderResult = await GetFolderSizeAndCount(graphClient, drive.Id, item.Id);
-                totalSize += folderResult.totalSize;
-                fileCount += folderResult.fileCount;
-            }
-        }
-
-        nextLink = items.AdditionalData.ContainsKey("@odata.nextLink") ? 
-                   items.AdditionalData["@odata.nextLink"].ToString() : 
-                   null;
-    }
-
-    return (totalSize, fileCount);
+    public int Id { get; set; }
+    public string Name { get; set; }
 }
 
-private async Task<(long totalSize, int fileCount)> GetFolderSizeAndCount(GraphServiceClient graphClient, string driveId, string folderId)
+public void SaveCsv(List<CsvModel> records, string filePath)
 {
-    long totalSize = 0;
-    int fileCount = 0;
-    string nextLink = $"{folderId}/children";
-
-    while (!string.IsNullOrEmpty(nextLink))
+    // Configure CsvHelper to append data and avoid writing headers if the file exists
+    var config = new CsvConfiguration(CultureInfo.InvariantCulture)
     {
-        var items = await graphClient.Drives[driveId].Items[nextLink].Request().GetAsync();
+        HasHeaderRecord = !File.Exists(filePath) // Write header only if the file does not exist
+    };
 
-        foreach (var item in items)
-        {
-            if (item.File != null)
-            {
-                totalSize += item.Size ?? 0;
-                fileCount++;
-            }
-            else if (item.Folder != null)
-            {
-                // Recursively process subfolders
-                var subfolderResult = await GetFolderSizeAndCount(graphClient, driveId, item.Id);
-                totalSize += subfolderResult.totalSize;
-                fileCount += subfolderResult.fileCount;
-            }
-        }
-
-        nextLink = items.AdditionalData.ContainsKey("@odata.nextLink") ? 
-                   items.AdditionalData["@odata.nextLink"].ToString() : 
-                   null;
+    using (var stream = new FileStream(filePath, FileMode.Append, FileAccess.Write))
+    using (var writer = new StreamWriter(stream))
+    using (var csv = new CsvWriter(writer, config))
+    {
+        csv.WriteRecords(records);
     }
-
-    return (totalSize, fileCount);
 }
